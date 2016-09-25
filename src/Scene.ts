@@ -31,6 +31,8 @@ class Scene {
   private logView: LogView;
   private mapView: MapView;
 
+  private player: Entities.Entity;
+
   constructor(engine: Engine, width: number, height: number) {
     this._engine = engine;
     this.width = width;
@@ -46,14 +48,16 @@ class Scene {
     this.registerListeners();
 
     this.mapView = new MapView(this.engine, this.map, this.map.width, this.map.height);
-    this.logView = new LogView(this.engine, this.width, 5);
 
     this.generateWily();
+    this.logView = new LogView(this.engine, this.width, 5, this.player);
+
     this.generateRats();
   }
 
   private generateWily() {
-    this.positionEntity(Entities.createWily(this.engine));
+    this.player = Entities.createWily(this.engine);
+    this.positionEntity(this.player);
   }
 
   private generateRats(num: number = 10) {
@@ -73,7 +77,7 @@ class Scene {
     let position = null;
     while (tries < 100 && !positioned) {
       position = Core.Position.getRandom();
-      positioned = this.canMove(position);
+      positioned = this.isWithoutEntity(position);
     }
 
     if (positioned) {
@@ -83,8 +87,8 @@ class Scene {
 
   private registerListeners() {
     this.engine.listen(new Events.Listener(
-      'canMove', 
-      this.onCanMove.bind(this)
+      'isWithoutEntity', 
+      this.onIsWithoutEntity.bind(this)
     ));
     this.engine.listen(new Events.Listener(
       'movedFrom', 
@@ -126,12 +130,12 @@ class Scene {
     }
   }
 
-  private onCanMove(event: Events.Event): boolean {
+  private onIsWithoutEntity(event: Events.Event): boolean {
     let position = event.data.position;
-    return this.canMove(position);
+    return this.isWithoutEntity(position);
   }
 
-  private canMove(position: Core.Position): boolean {
+  private isWithoutEntity(position: Core.Position): boolean {
     let tile = this.map.getTile(position);
     return tile.walkable && tile.entity === null;
   }

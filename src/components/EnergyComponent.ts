@@ -18,7 +18,7 @@ export class EnergyComponent extends Components.Component {
     return this._maxEnergy;
   }
 
-  constructor(engine: Engine, data: {regenratationRate: number, max: number} = {regenratationRate: 100, max: 1000}) {
+  constructor(engine: Engine, data: {regenratationRate: number, max: number} = {regenratationRate: 100, max: 100}) {
     super(engine);
     this._currentEnergy = this._maxEnergy = data.max;
     this._energyRegenerationRate = data.regenratationRate;
@@ -27,12 +27,18 @@ export class EnergyComponent extends Components.Component {
   protected registerListeners() {
     this.listeners.push(this.engine.listen(new Events.Listener(
       'tick',
-      this.onTick.bind(this)
+      this.onTick.bind(this),
+      1
     )));
   }
 
   private onTick(event: Events.Event) {
-    this._currentEnergy = Math.min(this.maxEnergy, this._currentEnergy + this._energyRegenerationRate);
+    let rate = this._energyRegenerationRate;
+    let rateModifiers = this.entity.gather(new Events.Event('onEnergyRegeneration'));
+    rateModifiers.forEach((modifier) => {
+      rate = rate * modifier;
+    });
+    this._currentEnergy = Math.min(this.maxEnergy, this._currentEnergy + rate);
   }
 
   useEnergy(energy: number): number {

@@ -32,7 +32,7 @@ export class RuneWriterComponent extends Components.Component {
 
     let hasRune = false;
     for (var key in tile.props) {
-      if (tile.props[key].name === 'rune') {
+      if (tile.props[key].type === 'rune') {
         hasRune = true;
       }
     }

@@ -16,14 +16,14 @@ export class RandomWalkBehaviour extends Behaviours.Behaviour {
 
   getNextAction(): Behaviours.Action {
     let positions = Core.Utils.randomizeArray(Core.Position.getNeighbours(this.physicsComponent.position));
-    let canMove = false;
+    let isWithoutEntity = false;
     let position: Core.Position = null;
-    while(!canMove && positions.length > 0) {
+    while(!isWithoutEntity && positions.length > 0) {
       position = positions.pop();
-      canMove = this.engine.can(new Events.Event('canMove', {position: position}));
+      isWithoutEntity = this.engine.is(new Events.Event('isWithoutEntity', {position: position}));
     }
     
-    if (canMove) {
+    if (isWithoutEntity) {
       return new Behaviours.WalkAction(this.physicsComponent, position);
     } else {
       return new Behaviours.NullAction();

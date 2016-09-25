@@ -7,7 +7,7 @@ import Engine = require('../Engine');
 import Glyph = require('../Glyph');
 
 export function createWily(engine: Engine) {
-    let wily = new Entities.Entity(engine, 'wily');
+    let wily = new Entities.Entity(engine, 'Wily', 'player');
     wily.addComponent(new Components.PhysicsComponent(engine));
     wily.addComponent(new Components.RenderableComponent(engine, {
       glyph: new Glyph('@', 0xffffff, 0x000000)
@@ -21,7 +21,7 @@ export function createWily(engine: Engine) {
 }
 
 export function createRat(engine: Engine) {
-    let rat = new Entities.Entity(engine, 'rat');
+    let rat = new Entities.Entity(engine, 'Rat', 'vermin');
     rat.addComponent(new Components.PhysicsComponent(engine));
     rat.addComponent(new Components.RenderableComponent(engine, {
       glyph: new Glyph('r', 0xffffff, 0x000000)

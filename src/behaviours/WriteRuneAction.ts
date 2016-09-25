@@ -18,18 +18,18 @@ export class WriteRuneAction extends Behaviours.Action {
   }
 
   act(): number {
-    const rune = new Entities.Entity(this.engine, 'Rune');
+    const rune = new Entities.Entity(this.engine, 'Rune', 'rune');
     rune.addComponent(new Components.PhysicsComponent(this.engine, {
       position: this.physics.position,
       blocking: false
     }));
     rune.addComponent(new Components.RenderableComponent(this.engine, {
-      glyph: new Glyph('#', 0x00ffaa, 0x000000)
+      glyph: new Glyph('#', 0x44ff88, 0x000000)
     }));
     rune.addComponent(new Components.SelfDestructComponent(this.engine, {
       turns: 10
     }));
-    rune.addComponent(new Components.RuneDamageComponent(this.engine));
+    rune.addComponent(new Components.RuneFreezeComponent(this.engine));
     return this.cost;
   }
 }

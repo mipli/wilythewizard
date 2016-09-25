@@ -13,7 +13,13 @@ export class Entity implements Mixins.IEventHandler {
   removeListener: (listener: Events.Listener) => void;
   emit: (event: Events.Event) => void;
   fire: (event: Events.Event) => any;
-  can: (event: Events.Event) => boolean;
+  is: (event: Events.Event) => boolean;
+  gather: (event: Events.Event) => any[];
+
+  private _type: string;
+  get type() {
+    return this._type;
+  }
 
   private _name: string;
   get name() {
@@ -26,10 +32,11 @@ export class Entity implements Mixins.IEventHandler {
   private engine: Engine;
   private components: Components.Component[];
 
-  constructor(engine: Engine, _name: string = '') {
+  constructor(engine: Engine, name: string = '', type: string = '') {
     this.engine = engine;
     this._guid = Core.Utils.generateGuid();
-    this._name = _name;
+    this._name = name;
+    this._type = type;
 
 
     this.components = [];

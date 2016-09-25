@@ -5,7 +5,8 @@ export interface IEventHandler {
   removeListener: (listener: Events.Listener) => void;
   emit: (event: Events.Event) => void;
   fire: (event: Events.Event) => any;
-  can: (event: Events.Event) => boolean;
+  is: (event: Events.Event) => boolean;
+  gather: (event: Events.Event) => any[];
 }
 
 export class EventHandler implements IEventHandler {
@@ -39,9 +40,6 @@ export class EventHandler implements IEventHandler {
   }
 
   emit(event: Events.Event) {
-    if (event.type === 'message') {
-      console.log(event);
-    }
     if (!this.listeners[event.type]) {
       return null;
     }
@@ -52,7 +50,7 @@ export class EventHandler implements IEventHandler {
     });
   }
 
-  can(event: Events.Event): boolean {
+  is(event: Events.Event): boolean {
     if (!this.listeners[event.type]) {
       return true;
     }
@@ -79,5 +77,18 @@ export class EventHandler implements IEventHandler {
       returnedValue = listener.callback(event);
     });
     return returnedValue;
+  }
+
+  gather(event: Events.Event): any[] {
+    if (!this.listeners[event.type]) {
+      return [];
+    }
+
+    let values = []
+
+    this.listeners[event.type].forEach((listener) => {
+      values.push(listener.callback(event));
+    });
+    return values;
   }
 }

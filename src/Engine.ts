@@ -34,7 +34,8 @@ class Engine implements Mixins.IEventHandler {
   removeListener: (listener: Events.Listener) => void;
   emit: (event: Events.Event) => void;
   fire: (event: Events.Event) => any;
-  can: (event: Events.Event) => boolean;
+  is: (event: Events.Event) => boolean;
+  gather: (event: Events.Event) => any[];
 
   private pixiConsole: PixiConsole;
 

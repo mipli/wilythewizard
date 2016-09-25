@@ -158,8 +158,8 @@ export class InputComponent extends Components.Component {
 
   private handleMovement(direction: Core.Position) {
     const position = Core.Position.add(this.physicsComponent.position, direction);
-    const canMove = this.engine.can(new Events.Event('canMove', {position: position}));
-    if (canMove) {
+    const isWithoutEntity = this.engine.is(new Events.Event('isWithoutEntity', {position: position}));
+    if (isWithoutEntity) {
       this.performAction(new Behaviours.WalkAction(this.physicsComponent, position));
     }
   }
