@@ -15,6 +15,7 @@ export function createWily(engine: Engine) {
     wily.addComponent(new Components.EnergyComponent(engine));
     wily.addComponent(new Components.InputComponent(engine));
     wily.addComponent(new Components.RuneWriterComponent(engine));
+    wily.addComponent(new Components.HealthComponent(engine));
 
     return wily;
 }
@@ -27,6 +28,7 @@ export function createRat(engine: Engine) {
     }));
     rat.addComponent(new Components.EnergyComponent(engine));
     rat.addComponent(new Components.RoamingAIComponent(engine));
+    rat.addComponent(new Components.HealthComponent(engine));
 
     return rat;
 }

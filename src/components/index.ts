@@ -8,3 +8,4 @@ export * from './RenderableComponent';
 export * from './PhysicsComponent';
 export * from './RuneWriterComponent';
 export * from './RuneDamageComponent';
+export * from './HealthComponent';

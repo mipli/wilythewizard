@@ -9,7 +9,6 @@ import Console = require('./Console');
 
 import InputHandler = require('./InputHandler');
 
-import LogView = require('./LogView');
 import Scene = require('./Scene');
 
 interface FrameRenderer {
@@ -168,6 +167,9 @@ class Engine {
   }
 
   emit(event: Events.Event) {
+    if (event.type === 'message') {
+      console.log(event);
+    }
     if (!this.listeners[event.type]) {
       return null;
     }

@@ -28,11 +28,15 @@ export class RuneDamageComponent extends Components.Component {
   }
 
   private onMovedTo(event: Events.Event) {
+    if (this.charges <= 0) {
+      return;
+    }
     const eventPosition = event.data.physicsComponent.position; 
     if (eventPosition.x == this.physicsComponent.position.x && 
         eventPosition.y === this.physicsComponent.position.y) {
-      console.log('destroying', event.data.entity);
-      this.engine.removeEntity(event.data.entity);
+      event.data.entity.emit(new Events.Event('damage', {
+        source: this.entity
+      }));
       this.charges--;
       if (this.charges <= 0) {
         this.engine.removeEntity(this.entity);
