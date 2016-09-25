@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node"
+  },
+  "exclude": [
+    "typings",
+    "node_modules"
+  ]
+}

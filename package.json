@@ -1,0 +1,35 @@
+{
+  "name": "phaser-typescript",
+  "version": "0.0.1",
+  "description": "Phaser tutorial",
+  "main": "app/index.html",
+  "scripts": {
+    "tsc": "tsc",
+    "tsc:w": "tsc -w --outDir app/build",
+    "tsc:b": "tsc -w --out app/build/dist.js",
+    "lite": "lite-server -c bs-config.json",
+    "start": "concurrent \"npm run tsc:w\" \"npm run lite\" "
+  },
+  "repository": {},
+  "license": "MIT",
+  "devDependencies": {
+    "babelify": "^7.3.0",
+    "browserify": "^13.0.1",
+    "concurrently": "*",
+    "gulp": "^3.9.1",
+    "gulp-uglify": "^1.5.4",
+    "lite-server": "*",
+    "tsify": "^1.0.1",
+    "typescript": "*",
+    "uglify": "^0.1.5",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "concurrently": "^2.2.0",
+    "lite-server": "^2.2.2",
+    "phaser": "*",
+    "requirejs": "^2.2.0",
+    "typescript": "^2.0.0",
+    "typescript-collections": "^1.1.2"
+  }
+}
