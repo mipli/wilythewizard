@@ -3,6 +3,7 @@ import * as Entities from './entities';
 import * as Components from './components';
 import * as Events from './events';
 import * as Collections from 'typescript-collections';
+import * as Mixins from './mixins';
 
 import PixiConsole = require('./PixiConsole');
 import Console = require('./Console');
@@ -27,7 +28,14 @@ let loop = (theRenderer: FrameRenderer) => {
   frameLoop(frameFunc);
 }
 
-class Engine {
+class Engine implements Mixins.IEventHandler {
+  // EventHandler mixin
+  listen: (listener: Events.Listener) => Events.Listener;
+  removeListener: (listener: Events.Listener) => void;
+  emit: (event: Events.Event) => void;
+  fire: (event: Events.Event) => any;
+  can: (event: Events.Event) => boolean;
+
   private pixiConsole: PixiConsole;
 
   private gameTime: number = 0;
@@ -42,9 +50,6 @@ class Engine {
 
   private entities: {[guid: string]: Entities.Entity};
   private toDestroy: Entities.Entity[];
-
-//  private listeners: {[event: string]: Collections.PriorityQueue<Events.Listener>};
-  private listeners: {[event: string]: Events.Listener[]};
 
   private paused: boolean;
 
@@ -65,7 +70,6 @@ class Engine {
     this.height = height;
     this.canvasId = canvasId;
 
-    this.listeners = {};
     this.entities = {};
     this.toDestroy = [];
 
@@ -141,73 +145,8 @@ class Engine {
   getEntity(guid: string) {
     return this.entities[guid];
   }
-
-  listen(listener: Events.Listener) {
-    if (!this.listeners[listener.type]) {
-      this.listeners[listener.type] = [];
-    }
-
-    this.listeners[listener.type].push(listener);
-    this.listeners[listener.type] = this.listeners[listener.type].sort((a: Events.Listener, b: Events.Listener) => a.priority - b.priority);
-
-    return listener;
-  }
-
-  removeListener(listener: Events.Listener) {
-    if (!this.listeners[listener.type]) {
-      return null;
-    }
-
-    const idx = this.listeners[listener.type].findIndex((l) => {
-      return l.guid === listener.guid;
-    });
-    if (typeof idx === 'number') {
-      this.listeners[listener.type].splice(idx, 1);
-    }
-  }
-
-  emit(event: Events.Event) {
-    if (event.type === 'message') {
-      console.log(event);
-    }
-    if (!this.listeners[event.type]) {
-      return null;
-    }
-    const listeners = this.listeners[event.type].map((i) => i);
-
-    listeners.forEach((listener) => {
-      listener.callback(event);
-    });
-  }
-
-  can(event: Events.Event): boolean {
-    if (!this.listeners[event.type]) {
-      return true;
-    }
-
-    let returnedValue = true;
-
-    this.listeners[event.type].forEach((listener) => {
-      if (!returnedValue) {
-        return;
-      }
-      returnedValue = listener.callback(event);
-    });
-    return returnedValue;
-  }
-
-  fire(event: Events.Event) {
-    if (!this.listeners[event.type]) {
-      return null;
-    }
-
-    let returnedValue = null;
-
-    this.listeners[event.type].forEach((listener) => {
-      returnedValue = listener.callback(event);
-    });
-    return returnedValue;
-  }
 }
+
+Core.Utils.applyMixins(Engine, [Mixins.EventHandler]);
 
 export = Engine;

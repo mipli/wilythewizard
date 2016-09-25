@@ -2,7 +2,7 @@ import * as Core from '../core';
 import * as Behaviours from '../behaviours';
 import * as Events from '../events';
 import * as Entities from '../entities';
-import * as Components from './index.ts';
+import * as Components from './index';
 
 import Glyph = require('../Glyph');
 import Engine = require('../Engine');
@@ -19,11 +19,10 @@ export class RuneWriterComponent extends Components.Component {
   }
 
   protected registerListeners() {
-    this.entity.listen({
-      type: 'writeRune',
-      callback: this.onWriteRune.bind(this),
-      priority: 1
-    });
+    this.entity.listen(new Events.Listener(
+      'writeRune',
+      this.onWriteRune.bind(this)
+    ));
   }
 
   onWriteRune(event: Events.Event) {

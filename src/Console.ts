@@ -64,7 +64,10 @@ class Console {
     }
   }
 
-  setText(ascii: number, x: number, y: number, width: number = 1, height: number = 1) {
+  setText(ascii: number | string, x: number, y: number, width: number = 1, height: number = 1) {
+    if (typeof ascii === 'string') {
+      ascii = (<string>ascii).charCodeAt(0);
+    }
     this.setMatrix(this._text, ascii, x, y, width, height);
   }
 

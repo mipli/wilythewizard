@@ -3,10 +3,18 @@ import * as Collections from 'typescript-collections';
 import * as Core from '../core';
 import * as Events from '../events';
 import * as Components from '../components';
+import * as Mixins from '../mixins';
 
 import Engine = require('../Engine');
 
-export class Entity {
+export class Entity implements Mixins.IEventHandler {
+  // EventHandler mixin
+  listen: (listener: Events.Listener) => Events.Listener;
+  removeListener: (listener: Events.Listener) => void;
+  emit: (event: Events.Event) => void;
+  fire: (event: Events.Event) => any;
+  can: (event: Events.Event) => boolean;
+
   private _name: string;
   get name() {
     return this._name;
@@ -18,8 +26,6 @@ export class Entity {
   private engine: Engine;
   private components: Components.Component[];
 
-  private listeners: {[event: string]: Collections.PriorityQueue<Events.IListener>};
-
   constructor(engine: Engine, _name: string = '') {
     this.engine = engine;
     this._guid = Core.Utils.generateGuid();
@@ -27,7 +33,6 @@ export class Entity {
 
 
     this.components = [];
-    this.listeners = {};
 
     this.engine.registerEntity(this);
   }
@@ -60,57 +65,6 @@ export class Entity {
     }
     return component[0];
   }
-
-  listen(listener: Events.IListener) {
-    if (!this.listeners[listener.type]) {
-      this.listeners[listener.type] = new Collections.PriorityQueue<Events.IListener>((a: Events.IListener, b: Events.IListener) => {
-        if (a.priority < b.priority) {
-          return 1;
-        }
-        if (a.priority > b.priority) {
-          return -1;
-        }
-        return 0;
-      });
-    }
-
-    this.listeners[listener.type].enqueue(listener);
-  }
-
-  emit(event: Events.Event) {
-    if (!this.listeners[event.type]) {
-      return null;
-    }
-
-    let usedListeners = [];
-    while (!this.listeners[event.type].isEmpty()) {
-      let listener = this.listeners[event.type].dequeue();
-      listener.callback(event);
-      usedListeners.push(listener)
-    }
-
-    while (usedListeners.length > 0) {
-      this.listeners[event.type].enqueue(usedListeners.pop());
-    }
-  }
-
-  fire(event: Events.Event) {
-    if (!this.listeners[event.type]) {
-      return null;
-    }
-
-    let usedListeners = [];
-    let ret = null;
-    while (ret === null && !this.listeners[event.type].isEmpty()) {
-      let listener = this.listeners[event.type].dequeue();
-      ret = listener.callback(event);
-      usedListeners.push(listener)
-    }
-
-    while (usedListeners.length > 0) {
-      this.listeners[event.type].enqueue(usedListeners.pop());
-    }
-
-    return ret;
-  }
 }
+
+Core.Utils.applyMixins(Entity, [Mixins.EventHandler]);

@@ -1,6 +1,6 @@
 import * as Core from '../core';
 import * as Events from '../events';
-import * as Components from './index.ts';
+import * as Components from './index';
 
 import Glyph = require('../Glyph');
 import Engine = require('../Engine');

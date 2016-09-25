@@ -1,6 +1,6 @@
 import * as Core from '../core';
 import * as Events from '../events';
-import * as Components from './index.ts';
+import * as Components from './index';
 import * as Behaviours from '../behaviours';
 
 import InputHandler = require('../InputHandler');

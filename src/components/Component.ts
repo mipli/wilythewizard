@@ -7,17 +7,17 @@ import Engine = require('../Engine');
 export class Component {
   protected listeners: Events.Listener[];
 
-  private _guid: string;
+  protected _guid: string;
   get guid() {
     return this._guid;
   }
 
-  private _entity: Entities.Entity;
+  protected _entity: Entities.Entity;
   get entity() {
     return this._entity;
   }
 
-  private _engine: Engine;
+  protected _engine: Engine;
   get engine() {
     return this._engine;
   }

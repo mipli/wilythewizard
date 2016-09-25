@@ -1,16 +1,15 @@
 import * as Core from '../core';
 import * as Events from '../events';
-import * as Components from './index.ts';
+import * as Components from './index';
 
 import Engine = require('../Engine');
 
 export class HealthComponent extends Components.Component {
   registerListeners() {
-    this.entity.listen({
-      type: 'damage',
-      callback: this.onDamage.bind(this),
-      priority: 1
-    });
+    this.entity.listen(new Events.Listener(
+       'damage',
+      this.onDamage.bind(this)
+    ));
   }
 
   private onDamage(event: Events.Event) {

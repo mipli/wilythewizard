@@ -1,7 +1,7 @@
 import * as Entities from '../entities';
 import * as Events from '../events';
 import * as Exceptions from '../Exceptions';
-import * as Components from './index.ts';
+import * as Components from './index';
 
 import Glyph = require('../Glyph');
 import Engine = require('../Engine');

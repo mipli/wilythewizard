@@ -1,5 +1,5 @@
 import Engine = require('../Engine');
-import * as Components from './index.ts';
+import * as Components from './index';
 import * as Events from '../events';
 
 export class TimeHandlerComponent extends Components.Component {
@@ -21,7 +21,7 @@ export class TimeHandlerComponent extends Components.Component {
   protected initialize() {
     this.ticksPerTurn = 1;
     this.turnTime = 0;
-    this._currentTurn = 1;
+    this._currentTurn = 0;
     this._currentTick = 0;
     this.paused = false;
   }

@@ -1,5 +1,5 @@
 import Engine = require('../Engine');
-import * as Components from './index.ts';
+import * as Components from './index';
 import * as Events from '../events';
 
 export class EnergyComponent extends Components.Component {
