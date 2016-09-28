@@ -34,7 +34,12 @@ export class RuneFreezeComponent extends Components.Component {
     const eventPosition = event.data.physicsComponent.position; 
     if (eventPosition.x == this.physicsComponent.position.x && 
         eventPosition.y === this.physicsComponent.position.y) {
-      event.data.entity.addComponent(new Components.SlowComponent(this.engine, {factor: 0.5})); 
+      event.data.entity.addComponent(
+        new Components.SlowComponent(this.engine, {factor: 0.5}),
+        { 
+          duration: 10
+        }
+      ); 
       this.charges--;
       if (this.charges <= 0) {
         this.engine.removeEntity(this.entity);

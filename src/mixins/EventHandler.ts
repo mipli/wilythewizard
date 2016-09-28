@@ -27,7 +27,7 @@ export class EventHandler implements IEventHandler {
   }
 
   removeListener(listener: Events.Listener) {
-    if (!this.listeners[listener.type]) {
+    if (!this.listeners || !this.listeners[listener.type]) {
       return null;
     }
 

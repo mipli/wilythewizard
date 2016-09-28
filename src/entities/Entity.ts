@@ -52,9 +52,21 @@ export class Entity implements Mixins.IEventHandler {
     this.engine.removeEntity(this);
   }
 
-  addComponent(component: Components.Component) {
+  addComponent(component: Components.Component, options: {duration: number} = null) {
     this.components.push(component);
     component.registerEntity(this);
+
+    if (options && options.duration) {
+      const delayedComponentRemover = new DelayedComponentRemover();
+      delayedComponentRemover.triggerTurn = this.engine.currentTurn + options.duration;
+      delayedComponentRemover.entity = this;
+      delayedComponentRemover.engine = this.engine;
+      delayedComponentRemover.guid = component.guid;
+      delayedComponentRemover.listener = this.engine.listen(new Events.Listener(
+        'turn',
+        delayedComponentRemover.check.bind(delayedComponentRemover)
+      ));
+    }
   }
 
   hasComponent(componentType): boolean {
@@ -71,6 +83,31 @@ export class Entity implements Mixins.IEventHandler {
       return null;
     }
     return component[0];
+  }
+
+  removeComponent(guid: string) {
+    const idx = this.components.findIndex((component) => {
+      return component.guid === guid;
+    });
+    if (idx >= 0) {
+      this.components[idx].destroy();
+      this.components.splice(idx, 1);
+    }
+  }
+
+}
+
+class DelayedComponentRemover {
+  triggerTurn: number;
+  listener: Events.Listener;
+  entity: Entity;
+  engine: Engine;
+  guid: string;
+  check(event: Events.Event) {
+    if (event.data.currentTurn >= this.triggerTurn) {
+      this.entity.removeComponent(this.guid);
+      this.engine.removeListener(this.listener);
+    }
   }
 }
 

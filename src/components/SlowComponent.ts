@@ -16,16 +16,16 @@ export class SlowComponent extends Components.Component {
   }
 
   registerListeners() {
-    this.entity.listen(new Events.Listener(
+    this.listeners.push(this.entity.listen(new Events.Listener(
       'onEnergyRegeneration',
       this.onEnergyRegeneration.bind(this),
       50
-    ));
+    )));
 
-    this.entity.listen(new Events.Listener(
+    this.listeners.push(this.entity.listen(new Events.Listener(
       'getStatusEffect',
       this.onGetStatusEffect.bind(this)
-    ));
+    )));
   }
 
   private onEnergyRegeneration(event: Events.Event) {

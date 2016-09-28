@@ -40,9 +40,7 @@ class LogView {
     this.currentTurn = event.data.currentTurn;
     if (this.messages.length > 0 && this.messages[this.messages.length - 1].turn < this.currentTurn - 10) {
       this.messages.pop();
-      this.console.setText(' ', 0, 0, this.console.width, this.console.height);
     }
-
     this.effects = this.player.gather(new Events.Event('getStatusEffect'));
   }
 
@@ -59,6 +57,8 @@ class LogView {
   }
 
   render(blitFunction: any) {
+    this.console.setText(' ', 0, 0, this.console.width, this.console.height);
+
     this.console.setText(' ', this.width - 10, 0, 10);
     this.console.print('Turn: ' + this.currentTurn, this.width - 10, 0, 0xffffff);
     if (this.effects.length > 0) {

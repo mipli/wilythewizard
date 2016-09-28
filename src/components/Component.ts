@@ -46,12 +46,11 @@ export class Component {
 
   destroy() {
     if (!this.listeners || typeof this.listeners.forEach !== 'function') {
-      console.log(this);
-      debugger;
       throw new Exceptions.MissingImplementationError('`this.listeners` has been redefined, default `destroy` function should not be used. For: ' + this.entity.name);
     }
     this.listeners.forEach((listener) => {
       this.engine.removeListener(listener);
+      this.entity.removeListener(listener);
     });
     this.listeners = [];
   }

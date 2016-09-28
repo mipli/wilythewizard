@@ -50,8 +50,10 @@ export class TimeHandlerComponent extends Components.Component {
       return;
     }
     this._currentTick++;
+    this.engine.currentTick = this._currentTick;
     if ((this._currentTick % this.ticksPerTurn) === 0) {
       this._currentTurn++;
+      this.engine.currentTurn = this._currentTurn;
       this.engine.emit(new Events.Event('turn', {currentTurn: this._currentTurn, currentTick: this._currentTick}));
 
       this.turnTime = gameTime;

@@ -64,6 +64,9 @@ class Engine implements Mixins.IEventHandler {
     return this._currentScene;
   }
 
+  public currentTick: number;
+  public currentTurn: number;
+
   constructor(width: number, height: number, canvasId: string) {
     this.paused = false;
 
@@ -73,6 +76,9 @@ class Engine implements Mixins.IEventHandler {
 
     this.entities = {};
     this.toDestroy = [];
+
+    this.currentTick = 0;
+    this.currentTurn = 0;
 
     this.engineTicksPerSecond = 10;
     frameLoop = (function() {
