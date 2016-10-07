@@ -1,4 +1,5 @@
 import * as Core from './core';
+import * as Generator from './map';
 
 import Map = require('./Map');
 import Tile = require('./Tile');
@@ -20,22 +21,34 @@ class MapGenerator {
   }
 
   generate(): Map {
-    let cells: number[][] = Core.Utils.buildMatrix(this.width, this.height, 0);
+    let cells: number[][] = Core.Utils.buildMatrix(this.width, this.height, 1);
     let map = new Map(this.width, this.height);
 
-    for (var x = 0; x < this.width; x++) {
-      for (var y = 0; y < this.height; y++) {
-        if (x === 0 || x === (this.width - 1) || y === 0 || y === (this.height - 1)) {
-          cells[x][y] = 1;
-        } else {
-          if (Math.random() > 0.9) {
-            cells[x][y] = 1;
-          } else {
-            cells[x][y] = 0;
-          }
-        }
-      }
+    let roomGenerator = new Generator.RoomGenerator(cells);
+
+    while (roomGenerator.iterate()) {
     }
+
+    cells = roomGenerator.getMap();
+
+    let startPosition = Generator.Utils.findCarveableSpot(cells);
+    let mazeGenerator = null;
+
+    while (startPosition !== null) {
+      mazeGenerator = new Generator.MazeRecursiveBacktrackGenerator(cells, startPosition);
+      while (mazeGenerator.iterate()) { }
+      cells = mazeGenerator.getMap();
+      startPosition = Generator.Utils.findCarveableSpot(cells);
+    }
+
+    cells = mazeGenerator.getMap();
+
+    let topologyCombinator = new Generator.TopologyCombinator(cells);
+    topologyCombinator.initialize();
+    topologyCombinator.combine();
+
+    cells = topologyCombinator.getMap();
+
     let tile: Tile;
     for (var x = 0; x < this.width; x++) {
       for (var y = 0; y < this.height; y++) {
@@ -43,7 +56,7 @@ class MapGenerator {
           tile = Tile.createTile(Tile.FLOOR);
         } else {
           tile = Tile.createTile(Tile.WALL);
-          tile.glyph = this.getWallGlyph(x, y, cells);
+          tile.glyph = new Glyph(Glyph.CHAR_BLOCK3, this.foregroundColor, this.backgroundColor);
         }
         map.setTile(new Core.Position(x, y), tile);
       }

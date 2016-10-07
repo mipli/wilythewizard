@@ -41,9 +41,9 @@ class Scene {
   }
 
   start() {
+    Core.Position.setMaxValues(this.width, this.height - 5);
     let mapGenerator = new MapGenerator(this.width, this.height - 5);
     this._map = mapGenerator.generate();
-    Core.Position.setMaxValues(this.map.width, this.map.height);
 
     this.registerListeners();
 
@@ -75,7 +75,7 @@ class Scene {
     let positioned = false;
     let tries = 0;
     let position = null;
-    while (tries < 100 && !positioned) {
+    while (tries < 1000 && !positioned) {
       position = Core.Position.getRandom();
       positioned = this.isWithoutEntity(position);
     }

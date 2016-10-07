@@ -41,7 +41,9 @@ class LogView {
     if (this.messages.length > 0 && this.messages[this.messages.length - 1].turn < this.currentTurn - 10) {
       this.messages.pop();
     }
-    this.effects = this.player.gather(new Events.Event('getStatusEffect'));
+    if (this.player) {
+      this.effects = this.player.gather(new Events.Event('getStatusEffect'));
+    }
   }
 
   private onMessage(event: Events.Event) {
