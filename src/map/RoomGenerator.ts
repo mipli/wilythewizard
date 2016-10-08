@@ -21,7 +21,7 @@ export class RoomGenerator {
   private isSpaceAvailable(x: number, y: number, width: number, height: number) {
     for (let i = x; i < x + width; i++) {
       for (let j = y; j < y + height; j++) {
-        if (!Map.Utils.canCarve(this.map, new Core.Position(i, j), 0)) {
+        if (!Map.Utils.canCarve(this.map, new Core.Position(i, j), 0, true)) {
           return false;
         }
       }

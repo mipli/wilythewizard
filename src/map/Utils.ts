@@ -44,38 +44,19 @@ export namespace Utils {
 
   export function countSurroundingTiles(map: number[][], position: Core.Position, checkDiagonals: boolean = false): number {
     let connections = 0;
-    if (position.y > 0 && map[position.x][position.y - 1] === 0) {
-      connections++;
-    }
-    if (position.y < map[0].length - 1 && map[position.x][position.y + 1] === 0) {
-      connections++;
-    }
-    if (position.x > 0 && map[position.x - 1][position.y] === 0) {
-      connections++;
-    }
-    if (position.x < map.length - 1 && map[position.x + 1][position.y] === 0) {
-      connections++;
-    }
-
-    if (checkDiagonals) {
-      if (position.y > 0 && position.x > 0 && map[position.x - 1][position.y - 1] === 0) {
-        connections++;
-      }
-      if (position.y < map[0].length - 1 && position.x < map.length - 1 && map[position.x + 1][position.y + 1] === 0) {
-        connections++;
-      }
-      if (position.x > 0 && position.y < map[0].length - 1 && map[position.x - 1][position.y + 1] === 0) {
-        connections++;
-      }
-      if (position.x < map.length - 1 && position.y > 0 && map[position.x + 1][position.y - 1] === 0) {
-        connections++;
-      }
-    }
-
-    return connections;
+    return Core.Position.getNeighbours(position, map.length, map[0].length, !checkDiagonals).filter((pos) => {
+      return map[pos.x][pos.y] === 0;
+    }).length;
   }
 
   export function canCarve(map: number[][], position: Core.Position, allowedConnections: number = 0, checkDiagonals: boolean = false): boolean {
+    if (!carveable(map, position)) {
+      return false;
+    }
+    return this.countSurroundingTiles(map, position, checkDiagonals) <= allowedConnections;
+  }
+
+  export function canExtendTunnel(map: number[][], position: Core.Position) {
     if (!carveable(map, position)) {
       return false;
     }
@@ -99,29 +80,14 @@ export namespace Utils {
       connections++;
     }
 
-    if (checkDiagonals) {
-      if (position.y > 0 && position.x > 0 && map[position.x - 1][position.y - 1] === 0) {
-        connections++;
-      }
-      if (position.y < map[0].length - 1 && position.x < map.length - 1 && map[position.x + 1][position.y + 1] === 0) {
-        connections++;
-      }
-      if (position.x > 0 && position.y < map[0].length - 1 && map[position.x - 1][position.y + 1] === 0) {
-        connections++;
-      }
-      if (position.x < map.length - 1 && position.y > 0 && map[position.x + 1][position.y - 1] === 0) {
-        connections++;
-      }
-    }
-
-    if (connections > allowedConnections) {
+    if (connections > 1) {
       return false;
     }
 
-    return canCarveFrom(map, position, connectedFrom);
+    return canExtendTunnelFrom(map, position, connectedFrom);
   }
 
-  export function canCarveFrom(map: number[][], position: Core.Position, direction: Direction) {
+  export function canExtendTunnelFrom(map: number[][], position: Core.Position, direction: Direction) {
     if (map[position.x][position.y] === 0) {
       return false;
     }

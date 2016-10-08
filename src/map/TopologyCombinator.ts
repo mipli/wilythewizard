@@ -54,6 +54,7 @@ export class TopologyCombinator {
         remainingTopologies.push(topologyId);
       }
     }
+    return remainingTopologies.length;
   }
 
   private combineTopology(a: number, b: number) {
@@ -72,7 +73,13 @@ export class TopologyCombinator {
       if (surroundingTiles === 2) {
         this.map[edge.x][edge.y] = 0;
         this.topologies[edge.x][edge.y] = a;
-        combined = true;
+        if (edges.length >= 4) {
+          if (Math.random() > 0.2) {
+            combined = true;
+          }
+        } else {
+          combined = true;
+        }
       }
     }
 
@@ -127,5 +134,27 @@ export class TopologyCombinator {
         this.addTopology(position, topologyId);
       }
     });
+  }
+
+  private pruneDeadEnd(position: Core.Position) {
+    if (this.map[position.x][position.y] === 0) {
+      let surroundingTiles = Map.Utils.countSurroundingTiles(this.map, new Core.Position(position.x, position.y));
+      if (surroundingTiles <= 1) {
+        this.map[position.x][position.y] = 1;
+        Core.Position.getNeighbours(position, -1, -1, true).forEach((neighbour) => {
+          this.pruneDeadEnd(neighbour);
+        });
+      }
+    }
+  }
+
+  pruneDeadEnds() {
+    for (var x = 0; x < this.width; x++) {
+      for (var y = 0; y < this.height; y++) {
+        if (this.map[x][y] === 0) {
+          this.pruneDeadEnd(new Core.Position(x, y));
+        }
+      }
+    }
   }
 }

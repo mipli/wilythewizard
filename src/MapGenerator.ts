@@ -20,10 +20,8 @@ class MapGenerator {
     this.foregroundColor = 0xaaaaaa;
   }
 
-  generate(): Map {
+  private generateMap(): number[][] {
     let cells: number[][] = Core.Utils.buildMatrix(this.width, this.height, 1);
-    let map = new Map(this.width, this.height);
-
     let roomGenerator = new Generator.RoomGenerator(cells);
 
     while (roomGenerator.iterate()) {
@@ -45,9 +43,19 @@ class MapGenerator {
 
     let topologyCombinator = new Generator.TopologyCombinator(cells);
     topologyCombinator.initialize();
-    topologyCombinator.combine();
+    let remainingTopologies = topologyCombinator.combine();
+    if (remainingTopologies > 5) {
+      console.log('remaining topologies', remainingTopologies);
+      return this.generateMap();
+    }
+    topologyCombinator.pruneDeadEnds();
 
-    cells = topologyCombinator.getMap();
+    return topologyCombinator.getMap();
+  }
+
+  generate(): Map {
+    let map = new Map(this.width, this.height);
+    let cells = this.generateMap();
 
     let tile: Tile;
     for (var x = 0; x < this.width; x++) {

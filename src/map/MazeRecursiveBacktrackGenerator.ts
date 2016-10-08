@@ -50,7 +50,7 @@ export class MazeRecursiveBacktrackGenerator {
     while (this.stack && this.stack.length > 0) {
       pos = this.stack.pop();
 
-      if (Map.Utils.canCarve(this.map, pos, 1)) {
+      if (Map.Utils.canExtendTunnel(this.map, pos)) {
         this.map[pos.x][pos.y] = 0;
         this.populateStack(pos);
 
