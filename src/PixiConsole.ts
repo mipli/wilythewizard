@@ -63,7 +63,8 @@ class PixiConsole {
   }
 
   private loadFont() {
-    let fontUrl = './terminal16x16.png';
+    //let fontUrl = './terminal16x16.png';
+    let fontUrl = './Talryth_square_15x15.png';
     this.font = PIXI.BaseTexture.fromImage(fontUrl, false, PIXI.SCALE_MODES.NEAREST);
     if (this.font.hasLoaded) {
       this.onFontLoaded();
@@ -82,7 +83,6 @@ class PixiConsole {
     this.initForegroundCells();
     this.addGridOverlay()
     this.loaded = true;
-    //this.animate();
   }
 
   private initCanvas() {
@@ -160,13 +160,6 @@ class PixiConsole {
       }
     }
   }
-
-  /*
-  private animate() {
-    requestAnimationFrame(this.animate.bind(this));
-    this.renderer.render(this.stage);
-  }
-  */
 
   render() {
     if (this.loaded) {

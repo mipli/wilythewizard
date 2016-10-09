@@ -1,4 +1,5 @@
 import * as Core from './core';
+import * as Generator from './map';
 import * as Events from './events';
 import * as Components from './components';
 import * as Entities from './entities';
@@ -50,9 +51,12 @@ class Scene {
     this.mapView = new MapView(this.engine, this.map, this.map.width, this.map.height);
 
     this.generateWily();
+    this.generateRats();
+
     this.logView = new LogView(this.engine, this.width, 5, this.player);
 
-    this.generateRats();
+    this.mapView.setViewEntity(this.player);
+
   }
 
   private generateWily() {

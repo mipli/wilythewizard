@@ -1,7 +1,7 @@
 import * as Core from './core';
 
 class Glyph {
-	public static CHAR_FULL: number = 129;
+	public static CHAR_FULL: number = 219;
 	public static CHAR_SPACE: number = 32;
 	// single walls
 	public static CHAR_HLINE: number = 196;

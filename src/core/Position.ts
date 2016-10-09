@@ -95,4 +95,11 @@ export class Position {
   public static add(a: Position, b: Position) {
     return new Position(a.x + b.x, a.y + b.y);
   }
+
+  public static getDiagonalOffsets() {
+    return [
+      {x: -1, y: -1}, {x:  1, y:  -1},
+      {x: -1, y:  1}, {x:  1, y:  1}
+    ]
+  }
 }

@@ -17,19 +17,19 @@ class Tile {
   public props: {[guid: string]: Entities.Entity};
 
   public static EMPTY: TileDescription = {
-    glyph: new Glyph(Glyph.CHAR_SPACE, 0xffffff, 0x000000),
+    glyph: new Glyph(Glyph.CHAR_SPACE, 0x000000, 0x000000),
     walkable: false,
     blocksSight: true,
   };
 
   public static FLOOR: TileDescription = {
-    glyph: new Glyph('\'', 0x222222, 0x000000),
+    glyph: new Glyph('\'', 0x444444, 0x222222),
     walkable: true,
-    blocksSight: true,
+    blocksSight: false,
   };
 
   public static WALL: TileDescription = {
-    glyph: new Glyph(Glyph.CHAR_HLINE, 0xffffff, 0x000000),
+    glyph: new Glyph(Glyph.CHAR_HLINE, 0xdddddd, 0x111111),
     walkable: false,
     blocksSight: true,
   };

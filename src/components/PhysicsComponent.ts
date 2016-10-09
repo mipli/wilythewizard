@@ -40,5 +40,6 @@ export class PhysicsComponent extends Components.Component {
     this._position = position;
     this.engine.emit(new Events.Event('movedTo', {physicsComponent: this, entity: this.entity}));
     this.engine.emit(new Events.Event('move', {physicsComponent: this, entity: this.entity}));
+    this.entity.emit(new Events.Event('move', {physicsComponent: this, entity: this.entity}));
   }
 }
