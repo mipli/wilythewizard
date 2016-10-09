@@ -63,7 +63,6 @@ class PixiConsole {
   }
 
   private loadFont() {
-    //let fontUrl = './terminal16x16.png';
     let fontUrl = './Talryth_square_15x15.png';
     this.font = PIXI.BaseTexture.fromImage(fontUrl, false, PIXI.SCALE_MODES.NEAREST);
     if (this.font.hasLoaded) {
@@ -81,7 +80,6 @@ class PixiConsole {
     this.initCharacterMap();
     this.initBackgroundCells();
     this.initForegroundCells();
-    this.addGridOverlay()
     this.loaded = true;
   }
 
@@ -149,16 +147,24 @@ class PixiConsole {
     }
   }
 
-  private addGridOverlay() {
-    for (let x = 0; x < this.width; x++) {
-      for (let y = 0; y < this.height; y++) {
+  addGridOverlay(x: number, y: number, width: number, height: number) {
+    for (let i = 0; i < width; i++) {
+      for (let j = 0; j < height; j++) {
         let cell = new PIXI.Graphics();
         cell.lineStyle(1, 0x444444, 0.5);
         cell.beginFill(0, 0);
-        cell.drawRect(x * this.charWidth, y * this.charHeight, this.charWidth, this.charHeight);
+        cell.drawRect((i + x) * this.charWidth, (j + y) * this.charHeight, this.charWidth, this.charHeight);
         this.stage.addChild(cell);
       }
     }
+  }
+
+  addBorder(x: number, y: number, width: number, height: number) {
+    let cell = new PIXI.Graphics();
+    cell.lineStyle(1, 0x444444, 0.5);
+    cell.beginFill(0, 0);
+    cell.drawRect(x * this.charWidth, y * this.charHeight, x * width * this.charWidth, y * height * this.charHeight);
+    this.stage.addChild(cell);
   }
 
   render() {

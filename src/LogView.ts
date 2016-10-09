@@ -2,6 +2,7 @@ import * as Events from './events';
 import * as Entities from './entities';
 
 import Engine = require('./Engine');
+import Glyph = require('./Glyph');
 import Console = require('./Console');
 
 class LogView {
@@ -61,15 +62,42 @@ class LogView {
   render(blitFunction: any) {
     this.console.setText(' ', 0, 0, this.console.width, this.console.height);
 
-    this.console.setText(' ', this.width - 10, 0, 10);
-    this.console.print('Turn: ' + this.currentTurn, this.width - 10, 0, 0xffffff);
+    for (let i = 0; i < this.width; i++) {
+      for (let j = 0; j < this.height; j++) {
+        let drawn = false;
+        if (i === 0 && j === 0) {
+          this.console.setText(Glyph.CHAR_SE, i, j);
+          drawn = true;
+        } else if (i === this.width - 1 && j === 0) {
+          this.console.setText(Glyph.CHAR_SW, i, j);
+          drawn = true;
+        } else if (i === this.width - 1 && j === this.height - 1) {
+          this.console.setText(Glyph.CHAR_NW, i, j);
+          drawn = true;
+        } else if (i === 0 && j === this.height - 1) {
+          this.console.setText(Glyph.CHAR_NE, i, j);
+          drawn = true;
+        } else if (i === 0 || i === this.width - 1) {
+          this.console.setText(Glyph.CHAR_VLINE, i, j);
+          drawn = true;
+        } else if (j === 0 || j === (this.height - 1)) {
+          this.console.setText(Glyph.CHAR_HLINE, i, j);
+          drawn = true;
+        }
+        if (drawn) {
+          this.console.setForeground(0xffffff, i, j);
+          this.console.setBackground(0x000000, i, j);
+        }
+      }
+    }
+
+    this.console.print('Turn: ' + this.currentTurn, this.width - 10, 1, 0xffffff);
     if (this.effects.length > 0) {
       let str = this.effects.reduce((acc, effect, idx) => {
         return acc + effect.name + (idx !== this.effects.length - 1 ? ', ' : '');
       }, 'Effects: ');
-      this.console.print(str, 0, 0, 0xffffff);
+      this.console.print(str, 1, 1, 0xffffff);
     }
-    this.console.print
     if (this.messages.length > 0) {
       this.messages.forEach((data, idx) => {
         let color = 0xffffff;
@@ -78,7 +106,7 @@ class LogView {
         } else if (data.turn < this.currentTurn - 2) {
           color = 0xaaaaaa;
         }
-        this.console.print(data.message, 0, this.height - idx, color);
+        this.console.print(data.message, 1, this.height - (idx + 1), color);
       });
     }
     blitFunction(this.console);
