@@ -4,7 +4,7 @@ import * as Entities from './entities';
 import Glyph = require('./Glyph');
 
 interface TileDescription {
-  glyph: Glyph;
+  glyph: Glyph | Glyph[];
   walkable: boolean;
   blocksSight: boolean;
 }
@@ -23,7 +23,14 @@ class Tile {
   };
 
   public static FLOOR: TileDescription = {
-    glyph: new Glyph('\'', 0x444444, 0x222222),
+    glyph: [
+      new Glyph('.', 0x3a4444, 0x222222),
+      new Glyph('.', 0x443a44, 0x222222),
+      new Glyph('.', 0x44443a, 0x222222),
+      new Glyph(',', 0x3a4444, 0x222222),
+      new Glyph(',', 0x443a44, 0x222222),
+      new Glyph(',', 0x44443a, 0x222222)
+    ],
     walkable: true,
     blocksSight: false,
   };
@@ -43,7 +50,13 @@ class Tile {
   }
 
   public static createTile(desc: TileDescription) {
-    return new Tile(desc.glyph, desc.walkable, desc.blocksSight);
+    var g: Glyph = null;
+    if ((<Array<Glyph>>desc.glyph).length && (<Array<Glyph>>desc.glyph).length > 0) {
+      g = <Glyph>Core.Utils.getRandomIndex(<Array<Glyph>>desc.glyph);
+    } else {
+      g = <Glyph>desc.glyph;
+    }
+    return new Tile(g, desc.walkable, desc.blocksSight);
   }
 }
 
