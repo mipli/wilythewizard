@@ -1,18 +1,18 @@
 import * as Entities from '../entities';
 import * as Events from '../events';
 import * as Exceptions from '../Exceptions';
+import * as Map from '../map';
 import * as Components from './index';
 
-import Glyph = require('../Glyph');
 import Engine = require('../Engine');
 
 export class RenderableComponent extends Components.Component {
-  private _glyph: Glyph;
+  private _glyph: Map.Glyph;
   get glyph() {
     return this._glyph;
   }
 
-  constructor(engine: Engine, data: {glyph: Glyph}) {
+  constructor(engine: Engine, data: {glyph: Map.Glyph}) {
     super(engine);
     this._glyph = data.glyph;
   }

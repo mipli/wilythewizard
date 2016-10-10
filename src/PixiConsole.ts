@@ -1,8 +1,8 @@
 /// <reference path='../typings/index.d.ts' />
 
 import * as Core from './core';
+import * as Map from './map';
 
-import Glyph = require('./Glyph');
 import Console = require('./Console');
 
 class PixiConsole {
@@ -48,7 +48,7 @@ class PixiConsole {
     this.defaultBackground = 0x00000;
     this.defaultForeground = 0xfffff;
 
-    this.text = Core.Utils.buildMatrix<number>(this.width, this.height, Glyph.CHAR_SPACE);
+    this.text = Core.Utils.buildMatrix<number>(this.width, this.height, Map.Glyph.CHAR_SPACE);
     this.fore = Core.Utils.buildMatrix<Core.Color>(this.width, this.height, this.defaultForeground);
     this.back = Core.Utils.buildMatrix<Core.Color>(this.width, this.height, this.defaultBackground);
     this.isDirty = Core.Utils.buildMatrix<boolean>(this.width, this.height, true);
@@ -118,7 +118,7 @@ class PixiConsole {
     for ( let x = 0; x < this.width; x++) {
       this.backCells[x] = [];
       for ( let y = 0; y < this.height; y++) {
-        let cell = new PIXI.Sprite(this.chars[Glyph.CHAR_FULL]);
+        let cell = new PIXI.Sprite(this.chars[Map.Glyph.CHAR_FULL]);
         cell.position.x = x * this.charWidth;
         cell.position.y = y * this.charHeight;
         cell.width = this.charWidth;
@@ -135,7 +135,7 @@ class PixiConsole {
     for (let x = 0; x < this.width; x++) {
       this.foreCells[x] = [];
       for (let y = 0; y < this.height; y++) {
-        let cell = new PIXI.Sprite(this.chars[Glyph.CHAR_SPACE]);
+        let cell = new PIXI.Sprite(this.chars[Map.Glyph.CHAR_SPACE]);
         cell.position.x = x * this.charWidth;
         cell.position.y = y * this.charHeight;
         cell.width = this.charWidth;

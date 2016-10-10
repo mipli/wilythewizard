@@ -1,5 +1,5 @@
 import * as Core from './core';
-import Glyph = require('./Glyph');
+import * as Map from './map';
 
 class Console {
   private _width: number;
@@ -38,7 +38,7 @@ class Console {
     this.defaultBackground = 0x00000;
     this.defaultForeground = 0xfffff;
 
-    this._text = Core.Utils.buildMatrix<number>(this.width, this.height, Glyph.CHAR_SPACE);
+    this._text = Core.Utils.buildMatrix<number>(this.width, this.height, Map.Glyph.CHAR_SPACE);
     this._fore = Core.Utils.buildMatrix<Core.Color>(this.width, this.height, this.defaultForeground);
     this._back = Core.Utils.buildMatrix<Core.Color>(this.width, this.height, this.defaultBackground);
     this._isDirty = Core.Utils.buildMatrix<boolean>(this.width, this.height, true);

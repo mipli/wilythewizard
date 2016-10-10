@@ -2,7 +2,6 @@ import * as Core from '../core';
 import * as Events from '../events';
 import * as Components from './index';
 
-import Glyph = require('../Glyph');
 import Engine = require('../Engine');
 
 export class PhysicsComponent extends Components.Component {

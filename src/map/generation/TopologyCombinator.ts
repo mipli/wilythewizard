@@ -1,8 +1,8 @@
-import * as Core from '../core';
-import * as Map from './index';
+import * as Core from '../../core';
+import * as Map from '../index';
 
 export class TopologyCombinator {
-  private map: number[][];
+  private cells: number[][];
   private topologies: number[][];
 
   private width: number;
@@ -10,11 +10,11 @@ export class TopologyCombinator {
 
   private topologyId: number;
 
-  constructor(map: number[][]) {
-    this.map = map;
+  constructor(cells: number[][]) {
+    this.cells = cells;
 
-    this.width = this.map.length;
-    this.height = this.map[0].length;
+    this.width = this.cells.length;
+    this.height = this.cells[0].length;
 
     this.topologies = [];
 
@@ -26,8 +26,8 @@ export class TopologyCombinator {
     }
   }
 
-  getMap() {
-    return this.map;
+  getCells() {
+    return this.cells;
   }
 
   initialize(): number[][] {
@@ -69,9 +69,9 @@ export class TopologyCombinator {
       let idx = Core.Utils.getRandom(0, edges.length - 1); 
       let edge = edges[idx];
       edges.splice(idx, 1);
-      let surroundingTiles = Map.Utils.countSurroundingTiles(this.map, edge);
+      let surroundingTiles = Map.Utils.countSurroundingTiles(this.cells, edge);
       if (surroundingTiles === 2) {
-        this.map[edge.x][edge.y] = 0;
+        this.cells[edge.x][edge.y] = 0;
         this.topologies[edge.x][edge.y] = a;
         if (edges.length >= 4) {
           if (Math.random() > 0.2) {
@@ -117,7 +117,7 @@ export class TopologyCombinator {
   private addTopology(position: Core.Position, topologyId: number = -1) {
     const x = position.x;
     const y = position.y;
-    if (this.map[x][y] !== 0 || this.topologies[x][y] !== 0) {
+    if (this.cells[x][y] !== 0 || this.topologies[x][y] !== 0) {
       return;
     }
 
@@ -130,17 +130,17 @@ export class TopologyCombinator {
 
     const neighbours = Core.Position.getNeighbours(new Core.Position(x, y), -1, -1, true);
     neighbours.forEach((position) => {
-      if (this.map[position.x][position.y] === 0 && this.topologies[position.x][position.y] === 0) {
+      if (this.cells[position.x][position.y] === 0 && this.topologies[position.x][position.y] === 0) {
         this.addTopology(position, topologyId);
       }
     });
   }
 
   private pruneDeadEnd(position: Core.Position) {
-    if (this.map[position.x][position.y] === 0) {
-      let surroundingTiles = Map.Utils.countSurroundingTiles(this.map, new Core.Position(position.x, position.y));
+    if (this.cells[position.x][position.y] === 0) {
+      let surroundingTiles = Map.Utils.countSurroundingTiles(this.cells, new Core.Position(position.x, position.y));
       if (surroundingTiles <= 1) {
-        this.map[position.x][position.y] = 1;
+        this.cells[position.x][position.y] = 1;
         Core.Position.getNeighbours(position, -1, -1, true).forEach((neighbour) => {
           this.pruneDeadEnd(neighbour);
         });
@@ -151,7 +151,7 @@ export class TopologyCombinator {
   pruneDeadEnds() {
     for (var x = 0; x < this.width; x++) {
       for (var y = 0; y < this.height; y++) {
-        if (this.map[x][y] === 0) {
+        if (this.cells[x][y] === 0) {
           this.pruneDeadEnd(new Core.Position(x, y));
         }
       }

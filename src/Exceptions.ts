@@ -27,3 +27,13 @@ export class EntityOverlapError extends Error {
     this.message = message;
   }
 }
+
+export class CouldNotGenerateMap extends Error {
+  public name: string;
+  public message: string;
+
+  constructor(message: string) {
+    super(message);
+    this.message = message;
+  }
+}

@@ -2,9 +2,8 @@ import * as Behaviours from './index';
 import * as Entities from '../entities';
 import * as Events from '../events';
 import * as Components from '../components';
+import * as Map from '../map';
 
-import Tile = require('../Tile');
-import Glyph = require('../Glyph');
 import Engine = require('../Engine');
 
 export class WriteRuneAction extends Behaviours.Action {
@@ -24,7 +23,7 @@ export class WriteRuneAction extends Behaviours.Action {
       blocking: false
     }));
     rune.addComponent(new Components.RenderableComponent(this.engine, {
-      glyph: new Glyph('#', 0x44ff88, 0x000000)
+      glyph: new Map.Glyph('#', 0x44ff88, 0x000000)
     }));
     rune.addComponent(new Components.SelfDestructComponent(this.engine, {
       turns: 10

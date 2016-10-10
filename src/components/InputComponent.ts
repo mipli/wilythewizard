@@ -4,7 +4,6 @@ import * as Components from './index';
 import * as Behaviours from '../behaviours';
 
 import InputHandler = require('../InputHandler');
-import Glyph = require('../Glyph');
 import Engine = require('../Engine');
 
 export class InputComponent extends Components.Component {

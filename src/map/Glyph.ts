@@ -1,6 +1,6 @@
-import * as Core from './core';
+import * as Core from '../core';
 
-class Glyph {
+export class Glyph {
 	public static CHAR_FULL: number = 219;
 	public static CHAR_SPACE: number = 32;
 	// single walls
@@ -112,5 +112,3 @@ class Glyph {
     this._backgroundColor = b;
   }
 }
-
-export = Glyph;

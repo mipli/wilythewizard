@@ -1,8 +1,8 @@
 import * as Events from './events';
 import * as Entities from './entities';
+import * as Map from './map';
 
 import Engine = require('./Engine');
-import Glyph = require('./Glyph');
 import Console = require('./Console');
 
 class LogView {
@@ -66,22 +66,22 @@ class LogView {
       for (let j = 0; j < this.height; j++) {
         let drawn = false;
         if (i === 0 && j === 0) {
-          this.console.setText(Glyph.CHAR_SE, i, j);
+          this.console.setText(Map.Glyph.CHAR_SE, i, j);
           drawn = true;
         } else if (i === this.width - 1 && j === 0) {
-          this.console.setText(Glyph.CHAR_SW, i, j);
+          this.console.setText(Map.Glyph.CHAR_SW, i, j);
           drawn = true;
         } else if (i === this.width - 1 && j === this.height - 1) {
-          this.console.setText(Glyph.CHAR_NW, i, j);
+          this.console.setText(Map.Glyph.CHAR_NW, i, j);
           drawn = true;
         } else if (i === 0 && j === this.height - 1) {
-          this.console.setText(Glyph.CHAR_NE, i, j);
+          this.console.setText(Map.Glyph.CHAR_NE, i, j);
           drawn = true;
         } else if (i === 0 || i === this.width - 1) {
-          this.console.setText(Glyph.CHAR_VLINE, i, j);
+          this.console.setText(Map.Glyph.CHAR_VLINE, i, j);
           drawn = true;
         } else if (j === 0 || j === (this.height - 1)) {
-          this.console.setText(Glyph.CHAR_HLINE, i, j);
+          this.console.setText(Map.Glyph.CHAR_HLINE, i, j);
           drawn = true;
         }
         if (drawn) {

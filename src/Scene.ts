@@ -1,16 +1,13 @@
 import * as Core from './core';
-import * as Generator from './map';
 import * as Events from './events';
 import * as Components from './components';
 import * as Entities from './entities';
+import * as Map from './map';
+
 import * as Exceptions from './Exceptions';
 
 import Engine = require('./Engine');
 import Console = require('./Console');
-import MapGenerator = require('./MapGenerator');
-import Map = require('./Map');
-import Tile = require('./Tile');
-import Glyph = require('./Glyph');
 
 import MapView = require('./MapView');
 import LogView = require('./LogView');
@@ -21,7 +18,7 @@ class Scene {
     return this._engine;
   }
 
-  private _map: Map;
+  private _map: Map.Map;
   get map() {
     return this._map;
   }
@@ -43,8 +40,8 @@ class Scene {
 
   start() {
     Core.Position.setMaxValues(this.width, this.height - 5);
-    let mapGenerator = new MapGenerator(this.width, this.height - 5);
-    this._map = mapGenerator.generate();
+    let dungeonGenerator = new Map.DungeonGenerator(this.width, this.height - 5);
+    this._map = dungeonGenerator.generate();
 
     this.registerListeners();
 

@@ -4,7 +4,6 @@ import * as Events from '../events';
 import * as Entities from '../entities';
 import * as Components from './index';
 
-import Glyph = require('../Glyph');
 import Engine = require('../Engine');
 
 export class RuneWriterComponent extends Components.Component {

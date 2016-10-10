@@ -1,19 +1,19 @@
-import * as Core from '../core';
-import * as Map from './index';
+import * as Core from '../../core';
+import * as Map from '../index';
 
 export class RoomGenerator {
-  private map: number[][];
+  private cells: number[][];
 
   private width: number;
   private height: number;
 
   private maxAttempts: number;
 
-  constructor(map: number[][], maxAttempts: number = 500) {
-    this.map = map;
+  constructor(cells: number[][], maxAttempts: number = 500) {
+    this.cells = cells;
 
-    this.width = this.map.length;
-    this.height = this.map[0].length;
+    this.width = this.cells.length;
+    this.height = this.cells[0].length;
 
     this.maxAttempts = maxAttempts;
   }
@@ -21,7 +21,7 @@ export class RoomGenerator {
   private isSpaceAvailable(x: number, y: number, width: number, height: number) {
     for (let i = x; i < x + width; i++) {
       for (let j = y; j < y + height; j++) {
-        if (!Map.Utils.canCarve(this.map, new Core.Position(i, j), 0, true)) {
+        if (!Map.Utils.canCarve(this.cells, new Core.Position(i, j), 0, true)) {
           return false;
         }
       }
@@ -29,7 +29,11 @@ export class RoomGenerator {
     return true;
   }
 
-  iterate() {
+  generate() {
+    while (this.addRoom()) { }
+  }
+
+  private addRoom() {
     let roomGenerated = false;
     let attempts = 0;
     while (!roomGenerated && attempts < this.maxAttempts) {
@@ -61,7 +65,7 @@ export class RoomGenerator {
     if (this.isSpaceAvailable(x, y, width, height)) {
         for (var i = x; i < x + width; i++) {
             for (var j = y; j < y + height; j++) {
-              this.map[i][j] = 0;    
+              this.cells[i][j] = 0;    
             }
         }
         return true;
@@ -70,7 +74,7 @@ export class RoomGenerator {
     return false;
   }
 
-  getMap() {
-    return this.map;
+  getCells() {
+    return this.cells;
   }
 }

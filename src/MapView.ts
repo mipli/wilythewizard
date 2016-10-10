@@ -1,14 +1,11 @@
 import * as Core from './core';
-import * as Generator from './map';
 import * as Components from './components';
 import * as Entities from './entities';
 import * as Events from './events';
+import * as Map from './map';
 
-import Glyph = require('./Glyph');
 import Engine = require('./Engine');
 import Console = require('./Console');
-import Map = require('./Map');
-import Tile = require('./Tile');
 
 class MapView {
   private renderableEntities: ({guid: string, renderable: Components.RenderableComponent, physics: Components.PhysicsComponent})[];
@@ -18,13 +15,13 @@ class MapView {
   private viewEntity: Entities.Entity;
 
   private lightMap: number[][];
-  private fovCalculator: Generator.FoV;
+  private fovCalculator: Map.FoV;
 
   private hasSeen: boolean[][];
 
   private fogOfWarColor: Core.Color;
 
-  constructor(private engine: Engine, private map: Map, private width: number, private height: number) {
+  constructor(private engine: Engine, private map: Map.Map, private width: number, private height: number) {
     this.fogOfWarColor = 0x9999aa;
     this.registerListeners();
     this.console = new Console(this.width, this.height);
@@ -45,7 +42,7 @@ class MapView {
       this.onViewEntityMove.bind(this)
     ));
 
-    this.fovCalculator = new Generator.FoV(
+    this.fovCalculator = new Map.FoV(
       (pos: Core.Position) => {
         let tile = this.map.getTile(pos);
         return !tile.blocksSight;  
@@ -152,7 +149,7 @@ class MapView {
     });
   }
 
-  private renderGlyph(console: Console, glyph: Glyph, position: Core.Position) {
+  private renderGlyph(console: Console, glyph: Map.Glyph, position: Core.Position) {
     if (!this.isVisible(position)) {
       return;
     }
@@ -161,17 +158,17 @@ class MapView {
   }
 
   private renderBackground(console: Console) {
-    this.map.forEach((position: Core.Position, tile: Tile) => {
+    this.map.forEach((position: Core.Position, tile: Map.Tile) => {
       let glyph = tile.glyph;
       if (!this.isVisible(position)) {
         if (this.hasSeen[position.x][position.y]) {
-          glyph = new Glyph(
+          glyph = new Map.Glyph(
             glyph.glyph,
             Core.ColorUtils.colorMultiply(glyph.foregroundColor, this.fogOfWarColor),
             Core.ColorUtils.colorMultiply(glyph.backgroundColor, this.fogOfWarColor)
           );
         } else {
-          glyph = new Glyph(Glyph.CHAR_FULL, 0x111111, 0x111111);
+          glyph = new Map.Glyph(Map.Glyph.CHAR_FULL, 0x111111, 0x111111);
         }
       }
       console.setText(glyph.glyph, position.x, position.y);
