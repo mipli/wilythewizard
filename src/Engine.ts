@@ -101,13 +101,21 @@ class Engine implements Mixins.IEventHandler {
     });
 
     this._inputHandler = new InputHandler(this);
+
+    this.registerDebugTools();
+  }
+
+  registerDebugTools() {
+    (<any>window).engine = this;
+    (<any>window).Events = Events;
+    (<any>window).Core = Core;
   }
 
   start(scene: Scene) {
     this._currentScene = scene;
     this._currentScene.start();
 
-    let timeKeeper = new Entities.Entity(this, 'timeKeeper');
+    let timeKeeper = new Entities.Entity(this, 'timeKeeper', Entities.Type.Vermin);
     this.timeHandlerComponent = new Components.TimeHandlerComponent(this);
     timeKeeper.addComponent(this.timeHandlerComponent);
 

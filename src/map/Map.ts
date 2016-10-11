@@ -12,6 +12,8 @@ export class Map {
   }
   public tiles: _Map.Tile[][];
 
+  private astar: _Map.Astar;
+
   constructor(w: number, h: number) {
     this._width = w;
     this._height = h;
@@ -22,6 +24,22 @@ export class Map {
         this.tiles[x][y] = _Map.Tile.createTile(_Map.Tile.EMPTY);
       }
     }
+
+    this.astar = new _Map.Astar(
+      (pos: Core.Position) => {
+        return this.isWalkable(pos);
+      },
+      (a: Core.Position, b: Core.Position) => {
+        return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+      }
+    );
+  }
+
+  getPath(start: Core.Position, target: Core.Position) {
+    let path =  this.astar.findPath(start, target);
+    console.log('Path', start, target);
+    console.log(path);
+    return path;
   }
 
   getTile(position: Core.Position): _Map.Tile {

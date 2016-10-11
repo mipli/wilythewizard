@@ -18,6 +18,14 @@ export class Position {
     return this._y;
   }
 
+  public toString() {
+    return this._x + ', ' + this._y;
+  }
+
+  public static equals(a: Position, b: Position) {
+    return a.x === b.x && a.y === b.y;
+  }
+
   public static setMaxValues(w: number, h: number) {
     Position.maxWidth = w;
     Position.maxHeight = h;

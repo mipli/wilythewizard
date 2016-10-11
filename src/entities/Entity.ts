@@ -4,6 +4,7 @@ import * as Core from '../core';
 import * as Events from '../events';
 import * as Components from '../components';
 import * as Mixins from '../mixins';
+import * as Entities from './index';
 
 import Engine = require('../Engine');
 
@@ -16,7 +17,7 @@ export class Entity implements Mixins.IEventHandler {
   is: (event: Events.Event) => boolean;
   gather: (event: Events.Event) => any[];
 
-  private _type: string;
+  private _type: Entities.Type;
   get type() {
     return this._type;
   }
@@ -32,7 +33,7 @@ export class Entity implements Mixins.IEventHandler {
   private engine: Engine;
   private components: Components.Component[];
 
-  constructor(engine: Engine, name: string = '', type: string = '') {
+  constructor(engine: Engine, name: string = '', type: Entities.Type = Entities.Type.Other) {
     this.engine = engine;
     this._guid = Core.Utils.generateGuid();
     this._name = name;

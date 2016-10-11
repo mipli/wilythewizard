@@ -6,8 +6,29 @@ import * as Entities from './index';
 
 import Engine = require('../Engine');
 
+export enum Type {
+  Other = 1,
+  Player,
+  Rune,
+  Vermin,
+  Demon
+}
+
+export function createImp(engine: Engine) {
+    let imp = new Entities.Entity(engine, 'Imp', Type.Demon);
+    imp.addComponent(new Components.PhysicsComponent(engine));
+    imp.addComponent(new Components.RenderableComponent(engine, {
+      glyph: new Map.Glyph('i', 0xaa33aa, 0x000000)
+    }));
+    imp.addComponent(new Components.EnergyComponent(engine));
+    imp.addComponent(new Components.RoamingAIComponent(engine));
+    imp.addComponent(new Components.HealthComponent(engine));
+
+    return imp;
+}
+
 export function createWily(engine: Engine) {
-    let wily = new Entities.Entity(engine, 'Wily', 'player');
+    let wily = new Entities.Entity(engine, 'Wily', Type.Player);
     wily.addComponent(new Components.PhysicsComponent(engine));
     wily.addComponent(new Components.RenderableComponent(engine, {
       glyph: new Map.Glyph('@', 0xffffff, 0x000000)
@@ -21,7 +42,7 @@ export function createWily(engine: Engine) {
 }
 
 export function createRat(engine: Engine) {
-    let rat = new Entities.Entity(engine, 'Rat', 'vermin');
+    let rat = new Entities.Entity(engine, 'Rat', Type.Vermin);
     rat.addComponent(new Components.PhysicsComponent(engine));
     rat.addComponent(new Components.RenderableComponent(engine, {
       glyph: new Map.Glyph('r', 0xffffff, 0x000000)

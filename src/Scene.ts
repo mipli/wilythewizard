@@ -48,7 +48,8 @@ class Scene {
     this.mapView = new MapView(this.engine, this.map, this.map.width, this.map.height);
 
     this.generateWily();
-    this.generateRats();
+    this.generateEntities(Entities.createRat, 10);
+    this.generateEntities(Entities.createImp, 10);
 
     this.logView = new LogView(this.engine, this.width, 5, this.player);
 
@@ -61,14 +62,11 @@ class Scene {
     this.positionEntity(this.player);
   }
 
-  private generateRats(num: number = 10) {
-    for (var i = 0; i < num; i++) {
-      this.generateRat();
-    }
-  }
 
-  private generateRat() {
-    this.positionEntity(Entities.createRat(this.engine));
+  private generateEntities(generator: (engine: Engine) => Entities.Entity, num: number) {
+    for (var i = 0; i < num; i++) {
+      this.positionEntity(generator(this.engine));
+    }
   }
 
   private positionEntity(entity: Entities.Entity) {
@@ -103,6 +101,17 @@ class Scene {
       'getTile', 
       this.onGetTile.bind(this)
     ));
+    this.engine.listen(new Events.Listener(
+      'getPath', 
+      this.onGetPath.bind(this)
+    ));
+  }
+
+  private onGetPath(event: Events.Event) {
+    let start = event.data.start;
+    let target = event.data.target;
+
+    return this.map.getPath(start, target);
   }
 
   private onGetTile(event: Events.Event) {

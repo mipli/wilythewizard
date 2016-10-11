@@ -17,7 +17,7 @@ export class WriteRuneAction extends Behaviours.Action {
   }
 
   act(): number {
-    const rune = new Entities.Entity(this.engine, 'Rune', 'rune');
+    const rune = new Entities.Entity(this.engine, 'Rune', Entities.Type.Rune);
     rune.addComponent(new Components.PhysicsComponent(this.engine, {
       position: this.physics.position,
       blocking: false

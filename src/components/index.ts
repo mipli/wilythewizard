@@ -2,6 +2,7 @@ export * from './Component';
 export * from './TimeHandlerComponent';
 export * from './SelfDestructComponent';
 export * from './RoamingAIComponent';
+export * from './FollowTargetAIComponent';
 export * from './EnergyComponent';
 export * from './InputComponent';
 export * from './RenderableComponent';

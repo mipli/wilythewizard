@@ -4,3 +4,4 @@ export * from './FoV';
 export * from './Map';
 export * from './Glyph';
 export * from './Tile';
+export * from './Astar';
