@@ -119,6 +119,13 @@ class MapView {
     }
   }
 
+  mouseClick(position: Core.Position) {
+    console.group("Position: " + position.x + ", " + position.y);
+    console.log(this.map.getTile(position));
+    console.groupEnd();
+  }
+
+
   render(blitFunction: any) {
     this.renderMap(this.console);
     blitFunction(this.console);

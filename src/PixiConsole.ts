@@ -35,9 +35,13 @@ class PixiConsole {
   private canvas: any;
   private topLeftPosition: Core.Position;
 
-  constructor(width: number, height: number, canvasId: string, foreground: Core.Color = 0xffffff, background: Core.Color = 0x000000) {
+  private mouseEventListener: (position: Core.Position) => void;
+
+  constructor(width: number, height: number, canvasId: string, foreground: Core.Color = 0xffffff, background: Core.Color = 0x000000, mouseEventListener: (position: Core.Position) => void) {
     this._width = width;
     this._height = height;
+
+    this.mouseEventListener = mouseEventListener;
 
     this.canvasId = canvasId;
 
@@ -81,6 +85,13 @@ class PixiConsole {
     this.initBackgroundCells();
     this.initForegroundCells();
     this.loaded = true;
+    this.initMouse();
+  }
+
+  private initMouse() {
+    this.canvas.addEventListener('click', (event: MouseEvent) => {
+      this.mouseEventListener(this.getPositionFromPixels(event.offsetX, event.offsetY));
+    });
   }
 
   private initCanvas() {
@@ -196,12 +207,12 @@ class PixiConsole {
 
   getPositionFromPixels(x: number, y: number) : Core.Position {
     if (!this.loaded) {
-      return new Core.Position(-1, -1);
+      return null;
     } 
     let dx: number = x - this.topLeftPosition.x;
     let dy: number = y - this.topLeftPosition.y;
-    let rx = Math.floor(dx / this.charWidth);
-    let ry = Math.floor(dy / this.charHeight);
+    let rx = Math.round(dx / this.charWidth);
+    let ry = Math.round(dy / this.charHeight);
     return new Core.Position(rx, ry);
   }
 }

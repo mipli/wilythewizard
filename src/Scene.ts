@@ -31,6 +31,8 @@ class Scene {
 
   private player: Entities.Entity;
 
+  private views: {view: any, topLeft: Core.Position, bottomRight: Core.Position}[];
+
   constructor(engine: Engine, width: number, height: number) {
     this._engine = engine;
     this.width = width;
@@ -55,6 +57,27 @@ class Scene {
 
     this.mapView.setViewEntity(this.player);
 
+    this.views = [];
+    this.views.push({
+      view: this.mapView,
+      topLeft: new Core.Position(0, 0),
+      bottomRight: new Core.Position(this.width, this.height - 5)
+    });
+    this.views.push({
+      view: this.logView,
+      topLeft: new Core.Position(0, this.height - 5),
+      bottomRight: new Core.Position(this.width, this.height)
+    });
+
+  }
+
+  mouseClick(position: Core.Position) {
+    this.views.forEach((view) => {
+      if (position.x >= view.topLeft.x && position.x <= view.bottomRight.x &&
+          position.y >= view.topLeft.y && position.y <= view.bottomRight.y) {
+        view.view.mouseClick(new Core.Position(position.x - view.topLeft.x, position.y - view.topLeft.y));
+      }
+    });
   }
 
   private generateWily() {

@@ -1,3 +1,4 @@
+import * as Core from './core';
 import * as Events from './events';
 import * as Entities from './entities';
 import * as Map from './map';
@@ -57,6 +58,9 @@ class LogView {
     if (this.messages.length > this.maxMessages) {
       this.messages.pop();
     }
+  }
+
+  mouseClick(position: Core.Position) {
   }
 
   render(blitFunction: any) {

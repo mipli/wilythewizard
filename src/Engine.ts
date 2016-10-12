@@ -111,15 +111,20 @@ class Engine implements Mixins.IEventHandler {
     (<any>window).Core = Core;
   }
 
+  private mouseEventListener(position: Core.Position) {
+    this._currentScene.mouseClick(position);
+  }
+
   start(scene: Scene) {
     this._currentScene = scene;
+    console.log(this._currentScene);
     this._currentScene.start();
 
     let timeKeeper = new Entities.Entity(this, 'timeKeeper', Entities.Type.Vermin);
     this.timeHandlerComponent = new Components.TimeHandlerComponent(this);
     timeKeeper.addComponent(this.timeHandlerComponent);
 
-    this.pixiConsole = new PixiConsole(this.width, this.height, this.canvasId, 0xffffff, 0x000000);
+    this.pixiConsole = new PixiConsole(this.width, this.height, this.canvasId, 0xffffff, 0x000000, this.mouseEventListener.bind(this));
     loop((time) => {
       if (this.paused) {
         return;
