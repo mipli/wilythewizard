@@ -110,7 +110,7 @@ class LogView {
         } else if (data.turn < this.currentTurn - 2) {
           color = 0xaaaaaa;
         }
-        this.console.print(data.message, 1, this.height - (idx + 1), color);
+        this.console.print(data.message, 1, this.height - (idx + 2), color);
       });
     }
     blitFunction(this.console);

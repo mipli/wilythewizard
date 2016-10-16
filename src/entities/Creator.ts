@@ -21,7 +21,9 @@ export function createImp(engine: Engine) {
       glyph: new Map.Glyph('i', 0xaa33aa, 0x000000)
     }));
     imp.addComponent(new Components.EnergyComponent(engine));
-    imp.addComponent(new Components.RoamingAIComponent(engine));
+    imp.addComponent(new Components.FollowTargetAIComponent(engine, {
+      targetType: Entities.Type.Player
+    }));
     imp.addComponent(new Components.HealthComponent(engine));
 
     return imp;

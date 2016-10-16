@@ -165,6 +165,17 @@ class Engine implements Mixins.IEventHandler {
   getEntity(guid: string) {
     return this.entities[guid];
   }
+
+  getEntities(filter: (entity: Entities.Entity) => boolean) {
+    let entities = [];
+    for (let guid in this.entities) {
+      let entity = this.entities[guid];
+      if (filter(entity)) {
+        entities.push(entity);
+      }
+    }
+    return entities;
+  }
 }
 
 Core.Utils.applyMixins(Engine, [Mixins.EventHandler]);

@@ -46,6 +46,9 @@ export class Entity implements Mixins.IEventHandler {
   }
 
   destroy() {
+    this.engine.emit(new Events.Event('entityDestroyed', {
+      entity: this
+    }));
     this.components.forEach((component) => {
       component.destroy();
       component = null;

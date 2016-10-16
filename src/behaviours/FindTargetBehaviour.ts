@@ -9,11 +9,34 @@ import Engine = require('../Engine');
 export class FindTargetBehaviour extends Behaviours.Behaviour {
   private physicsComponent: Components.PhysicsComponent;
 
-  constructor(protected engine: Engine, protected entity: Entities.Entity) {
+  constructor(protected engine: Engine, protected entity: Entities.Entity, private sightLength: number = 5) {
     super(entity);
+    this.physicsComponent = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
   }
 
-  getNextAction(): Behaviours.Action {
-    return new Behaviours.NullAction();
+  private findTarget() {
+    let targets = this.engine.getEntities((entity) => {
+      return entity.type === Entities.Type.Player;
+    });
+
+    let target = null;
+
+    targets.forEach((entity) => {
+      let phys = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
+      if (Core.Position.distance(phys.position, this.physicsComponent.position) <= this.sightLength) {
+        target = entity;
+      }
+    });
+    return target;
+  }
+
+  invoke() {
+    const target = this.findTarget();
+    if (!target) {
+      return null;
+    }
+    return {
+      entity: this.findTarget()
+    }
   }
 }

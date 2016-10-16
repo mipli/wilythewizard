@@ -81,10 +81,14 @@ class Scene {
   }
 
   private generateWily() {
-    this.player = Entities.createWily(this.engine);
-    this.positionEntity(this.player);
+    const player = Entities.createWily(this.engine);
+    this.positionEntity(player);
+    this.registerPlayer(player);
   }
 
+  private registerPlayer(player: Entities.Entity) {
+    this.player = player;
+  }
 
   private generateEntities(generator: (engine: Engine) => Entities.Entity, num: number) {
     for (var i = 0; i < num; i++) {
@@ -128,7 +132,19 @@ class Scene {
       'getPath', 
       this.onGetPath.bind(this)
     ));
+    this.engine.listen(new Events.Listener(
+      'entityDestroyed', 
+      this.onEntityDestroy.bind(this)
+    ));
   }
+
+  private onEntityDestroy(event: Events.Event) {
+    let entity = event.data.entity;
+    if (entity.guid === this.player.guid) {
+      this.engine.emit(new Events.Event('pauseTime'));
+    }
+  }
+
 
   private onGetPath(event: Events.Event) {
     let start = event.data.start;

@@ -29,16 +29,12 @@ export class Map {
       (pos: Core.Position) => {
         return this.isWalkable(pos);
       },
-      (a: Core.Position, b: Core.Position) => {
-        return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
-      }
+      Core.Position.eulerDistance
     );
   }
 
   getPath(start: Core.Position, target: Core.Position) {
     let path =  this.astar.findPath(start, target);
-    console.log('Path', start, target);
-    console.log(path);
     return path;
   }
 

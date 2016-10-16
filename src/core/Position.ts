@@ -26,6 +26,14 @@ export class Position {
     return a.x === b.x && a.y === b.y;
   }
 
+  public static eulerDistance(a: Position, b: Position) {
+    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+  }
+
+  public static distance(a: Position, b: Position) {
+    return Math.max(Math.abs(a.x - b.x), Math.abs(a.y - b.y));
+  }
+
   public static setMaxValues(w: number, h: number) {
     Position.maxWidth = w;
     Position.maxHeight = h;

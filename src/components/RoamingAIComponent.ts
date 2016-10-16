@@ -23,7 +23,7 @@ export class RoamingAIComponent extends Components.Component {
 
   onTick(event: Events.Event) {
     if (this.energyComponent.currentEnergy >= 100) {
-      let action = this.randomWalkBehaviour.getNextAction();
+      let action = <Behaviours.Action>this.randomWalkBehaviour.invoke();
       this.energyComponent.useEnergy(action.act());
     }
   }

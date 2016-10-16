@@ -14,7 +14,7 @@ export class RandomWalkBehaviour extends Behaviours.Behaviour {
     this.physicsComponent = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
   }
 
-  getNextAction(): Behaviours.Action {
+  invoke() {
     let positions = Core.Utils.randomizeArray(Core.Position.getNeighbours(this.physicsComponent.position));
     let isWithoutEntity = false;
     let position: Core.Position = null;
