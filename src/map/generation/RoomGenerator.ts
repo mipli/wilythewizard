@@ -45,7 +45,7 @@ export class RoomGenerator {
   }
 
   private generateRoom() {
-    const size = Core.Utils.getRandom(3, 5);
+    const size = Core.Utils.getRandom(4, 7);
     const rectangularity = Core.Utils.getRandom(1, 3);
     let width: number;
     let height: number;
