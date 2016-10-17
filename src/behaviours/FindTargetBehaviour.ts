@@ -9,15 +9,18 @@ import Engine = require('../Engine');
 export class FindTargetBehaviour extends Behaviours.Behaviour {
   private physicsComponent: Components.PhysicsComponent;
 
-  constructor(protected engine: Engine, protected entity: Entities.Entity, private sightLength: number = 5) {
+  constructor(protected engine: Engine, protected entity: Entities.Entity, private isTarget: (entity: Entities.Entity) => boolean, private sightLength: number = 5) {
     super(entity);
     this.physicsComponent = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
   }
 
   private findTarget() {
+    /*
     let targets = this.engine.getEntities((entity) => {
       return entity.type === Entities.Type.Player;
     });
+    */
+    let targets = this.engine.getEntities(this.isTarget);
 
     let target = null;
 

@@ -20,7 +20,7 @@ class LogView {
     this.console = new Console(this.width, this.height);
     this.currentTurn = 1;
     this.messages = [];
-    this.maxMessages = this.height - 1;
+    this.maxMessages = this.height - 2;
 
     this.player = player;
     this.effects = [];

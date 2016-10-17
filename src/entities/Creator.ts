@@ -31,6 +31,9 @@ export function createImp(engine: Engine) {
 
 export function createWily(engine: Engine) {
     let wily = new Entities.Entity(engine, 'Wily', Type.Player);
+    wily.addComponent(new Components.FactionComponent(engine, {
+      faction: 'PLAYER'
+    }));
     wily.addComponent(new Components.PhysicsComponent(engine));
     wily.addComponent(new Components.RenderableComponent(engine, {
       glyph: new Map.Glyph('@', 0xffffff, 0x000000)

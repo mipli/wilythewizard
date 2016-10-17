@@ -117,7 +117,6 @@ class Engine implements Mixins.IEventHandler {
 
   start(scene: Scene) {
     this._currentScene = scene;
-    console.log(this._currentScene);
     this._currentScene.start();
 
     let timeKeeper = new Entities.Entity(this, 'timeKeeper', Entities.Type.Vermin);
