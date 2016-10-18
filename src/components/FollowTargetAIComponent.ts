@@ -48,8 +48,10 @@ export class FollowTargetAIComponent extends Components.Component {
   act() {
     if (this.target) {
       const targetPhysicsComponent = <Components.PhysicsComponent>this.target.getComponent(Components.PhysicsComponent); 
-      const distance = this.getDistance(targetPhysicsComponent.position);
-      if (distance <= 5) {
+      let canSee = this.entity.fire(new Events.Event('canSee', {
+        position: targetPhysicsComponent.position
+      }));
+      if (canSee) {
         return this.followTarget();
       } else {
         this.engine.emit(new Events.Event('message', {

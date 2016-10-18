@@ -14,11 +14,6 @@ class MapView {
 
   private viewEntity: Entities.Entity;
 
-  private lightMap: number[][];
-  private fovCalculator: Map.FoV;
-
-  private hasSeen: boolean[][];
-
   private fogOfWarColor: Core.Color;
 
   constructor(private engine: Engine, private map: Map.Map, private width: number, private height: number) {
@@ -28,45 +23,10 @@ class MapView {
     this.renderableEntities = [];
     this.renderableItems = [];
     this.viewEntity = null;
-    this.fovCalculator = null;
-    this.lightMap = Core.Utils.buildMatrix<number>(this.width, this.height, 0);
-    this.hasSeen = Core.Utils.buildMatrix<boolean>(this.width, this.height, false);
   }
 
   setViewEntity(entity: Entities.Entity) {
-    this.hasSeen = Core.Utils.buildMatrix<boolean>(this.width, this.height, false);
-
     this.viewEntity = entity;
-    this.viewEntity.listen(new Events.Listener(
-      'move',
-      this.onViewEntityMove.bind(this)
-    ));
-
-    this.fovCalculator = new Map.FoV(
-      (pos: Core.Position) => {
-        let tile = this.map.getTile(pos);
-        return !tile.blocksSight;  
-      },
-      this.map.width,
-      this.map.height,
-      20 
-    );
-
-    this.onViewEntityMove(null);
-  }
-
-  private onViewEntityMove(event: Events.Event) {
-    let pos: Core.Position = (<Components.PhysicsComponent>this.viewEntity.getComponent(Components.PhysicsComponent)).position;
-
-    this.lightMap = this.fovCalculator.calculate(pos);
-
-    for (var x = 0; x < this.width; x++) {
-      for (var y = 0; y < this.height; y++) {
-        if (this.lightMap[x][y] > 0) {
-          this.hasSeen[x][y] = true;
-        }
-      }
-    }
   }
 
   private registerListeners() {
@@ -168,7 +128,7 @@ class MapView {
     this.map.forEach((position: Core.Position, tile: Map.Tile) => {
       let glyph = tile.glyph;
       if (!this.isVisible(position)) {
-        if (this.hasSeen[position.x][position.y]) {
+        if (this.hasSeen(position)) {
           glyph = new Map.Glyph(
             glyph.glyph,
             Core.ColorUtils.colorMultiply(glyph.foregroundColor, this.fogOfWarColor),
@@ -185,7 +145,15 @@ class MapView {
   }
 
   private isVisible(position: Core.Position) {
-    return this.lightMap[position.x][position.y] === 1;
+    return this.viewEntity.fire(new Events.Event('canSee', {
+      position: position
+    }));
+  }
+
+  private hasSeen(position: Core.Position) {
+    return this.viewEntity.fire(new Events.Event('hasSeen', {
+      position: position
+    }));
   }
 }
 

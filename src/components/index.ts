@@ -13,3 +13,4 @@ export * from './RuneWriterComponent';
 export * from './RuneDamageComponent';
 export * from './RuneFreezeComponent';
 export * from './SlowComponent';
+export * from './SightComponent';

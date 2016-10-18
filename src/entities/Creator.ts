@@ -25,6 +25,7 @@ export function createImp(engine: Engine) {
       targetType: Entities.Type.Player
     }));
     imp.addComponent(new Components.HealthComponent(engine));
+    imp.addComponent(new Components.SightComponent(engine));
 
     return imp;
 }
@@ -42,6 +43,7 @@ export function createWily(engine: Engine) {
     wily.addComponent(new Components.InputComponent(engine));
     wily.addComponent(new Components.RuneWriterComponent(engine));
     wily.addComponent(new Components.HealthComponent(engine));
+    wily.addComponent(new Components.SightComponent(engine));
 
     return wily;
 }

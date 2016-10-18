@@ -133,9 +133,17 @@ class Scene {
       this.onGetPath.bind(this)
     ));
     this.engine.listen(new Events.Listener(
+      'getMap', 
+      this.onGetMap.bind(this)
+    ));
+    this.engine.listen(new Events.Listener(
       'entityDestroyed', 
       this.onEntityDestroy.bind(this)
     ));
+  }
+
+  private onGetMap(event: Events.Event) {
+    return this.map;
   }
 
   private onEntityDestroy(event: Events.Event) {
@@ -144,7 +152,6 @@ class Scene {
       this.engine.emit(new Events.Event('pauseTime'));
     }
   }
-
 
   private onGetPath(event: Events.Event) {
     let start = event.data.start;

@@ -15,22 +15,20 @@ export class FindTargetBehaviour extends Behaviours.Behaviour {
   }
 
   private findTarget() {
-    /*
-    let targets = this.engine.getEntities((entity) => {
-      return entity.type === Entities.Type.Player;
-    });
-    */
     let targets = this.engine.getEntities(this.isTarget);
 
     let target = null;
 
-    targets.forEach((entity) => {
+    targets = targets.filter((entity) => {
       let phys = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
-      if (Core.Position.distance(phys.position, this.physicsComponent.position) <= this.sightLength) {
-        target = entity;
-      }
+      return this.entity.fire(new Events.Event('canSee', {
+        position: phys.position
+      }));
     });
-    return target;
+    if (targets.length > 0) {
+      return targets[0];
+    }
+    return null;
   }
 
   invoke() {
@@ -39,7 +37,7 @@ export class FindTargetBehaviour extends Behaviours.Behaviour {
       return null;
     }
     return {
-      entity: this.findTarget()
+      entity: target
     }
   }
 }
