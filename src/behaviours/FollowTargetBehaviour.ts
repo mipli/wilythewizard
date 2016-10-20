@@ -25,7 +25,7 @@ export class FollowTargetBehaviour extends Behaviours.Behaviour {
       target: this.target
     }));
 
-    if (path.length > 2) {
+    if (path.length >= 2) {
       const position = path[1];
       if (this.engine.is(new Events.Event('isWithoutEntity', {position: position}))) {
         return new Behaviours.WalkAction(this.physicsComponent, position);

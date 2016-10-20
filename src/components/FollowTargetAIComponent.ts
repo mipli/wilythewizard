@@ -15,11 +15,15 @@ export class FollowTargetAIComponent extends Components.Component {
   private randomWalkBehaviour: Behaviours.RandomWalkBehaviour;
 
   private targetType: Entities.Type;
+
   private target: Entities.Entity;
+  private targetPosition: Core.Position;
 
   constructor(engine: Engine, data: {targetType: Entities.Type}) {
     super(engine);
     this.targetType = data.targetType;
+    this.target = null;
+    this.targetPosition = null;
   }
 
   protected initialize() {
@@ -46,27 +50,22 @@ export class FollowTargetAIComponent extends Components.Component {
   }
 
   act() {
-    if (this.target) {
-      const targetPhysicsComponent = <Components.PhysicsComponent>this.target.getComponent(Components.PhysicsComponent); 
-      let canSee = this.entity.fire(new Events.Event('canSee', {
-        position: targetPhysicsComponent.position
-      }));
-      if (canSee) {
-        return this.followTarget();
-      } else {
-        this.engine.emit(new Events.Event('message', {
-          message: this.entity.name + ' lost ' + this.target.name + '.',
-          target: this.target
-        }));
-        this.target = null;
-      }
-    }
-
     const targetResult = this.findTargetBehavoiur.invoke();
+    let isFollowing = this.targetPosition !== null;
     if (targetResult) {
       this.target = targetResult.entity;
+      this.targetPosition = (<Components.PhysicsComponent>this.target.getComponent(Components.PhysicsComponent)).position; 
+      if (!isFollowing) {
+        this.engine.emit(new Events.Event('message', {
+          message: this.entity.name + ' is following ' + this.target.name + '.',
+          target: this.target
+        }));
+      }
+      return this.followTarget();
+    } else if (isFollowing) {
+      this.target = null;
       this.engine.emit(new Events.Event('message', {
-        message: this.entity.name + ' is following ' + this.target.name + '.',
+        message: this.entity.name + ' lost ' + this.target.name + '.',
         target: this.target
       }));
       return this.followTarget();
@@ -81,14 +80,17 @@ export class FollowTargetAIComponent extends Components.Component {
   }
 
   private followTarget() {
-    const targetPhysicsComponent = <Components.PhysicsComponent>this.target.getComponent(Components.PhysicsComponent); 
-    const distance = this.getDistance(targetPhysicsComponent.position);
+    const distance = this.getDistance(this.targetPosition);
 
-    if (distance === 1) {
+    if (distance === 1 && this.target) {
       const attackAction = new Behaviours.MeleeAttackAction(this.entity, this.target);
       return this.energyComponent.useEnergy(attackAction.act());
+    } else if (distance === 0) {
+      this.targetPosition = null;
+      let action = <Behaviours.Action>this.randomWalkBehaviour.invoke();
+      return this.energyComponent.useEnergy(action.act());
     } else {
-      this.followTargetBehavoiur.setTarget(targetPhysicsComponent.position);
+      this.followTargetBehavoiur.setTarget(this.targetPosition);
       const walkAction = this.followTargetBehavoiur.invoke();
       return this.energyComponent.useEnergy(walkAction.act());
     }
