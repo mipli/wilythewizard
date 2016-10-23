@@ -8,21 +8,18 @@ import Engine = require('../Engine');
 
 export class FollowTargetBehaviour extends Behaviours.Behaviour {
   private physicsComponent: Components.PhysicsComponent;
-  private target: Core.Position;
 
   constructor(protected engine: Engine, protected entity: Entities.Entity) {
     super(entity);
     this.physicsComponent = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
   }
 
-  setTarget(target: Core.Position) {
-    this.target = target;
-  }
 
-  invoke() {
+  invoke(data: {target: Entities.Entity}) {
+    const position = (<Components.PhysicsComponent>data.target.getComponent(Components.PhysicsComponent)).position;
     const path = this.engine.fire(new Events.Event('getPath', {
       start: this.physicsComponent.position,
-      target: this.target
+      target: position
     }));
 
     if (path.length >= 2) {

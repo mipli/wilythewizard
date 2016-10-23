@@ -7,11 +7,18 @@ import * as Events from '../events';
 export class RoamingAIComponent extends Components.Component {
   private energyComponent: Components.EnergyComponent;
 
-  private randomWalkBehaviour: Behaviours.RandomWalkBehaviour;
+  private behaviourTree: Behaviours.BehaviourTree;
 
   protected initialize() {
     this.energyComponent = <Components.EnergyComponent>this.entity.getComponent(Components.EnergyComponent);
-    this.randomWalkBehaviour = new Behaviours.RandomWalkBehaviour(this.engine, this.entity);
+    this.initializeBehaviourTree();
+  }
+
+  private initializeBehaviourTree() {
+    this.behaviourTree = new Behaviours.BehaviourTree();
+    this.behaviourTree.addRoot(
+      new Behaviours.RandomWalkBehaviour(this.engine, this.entity)
+    );
   }
 
   protected registerListeners() {
@@ -23,8 +30,13 @@ export class RoamingAIComponent extends Components.Component {
 
   onTick(event: Events.Event) {
     if (this.energyComponent.currentEnergy >= 100) {
-      let action = <Behaviours.Action>this.randomWalkBehaviour.invoke();
-      this.energyComponent.useEnergy(action.act());
+      let action = this.behaviourTree.invoke();
+      if (typeof (<Behaviours.Action>action).act === 'function') {
+        this.energyComponent.useEnergy((<Behaviours.Action>action).act());
+      } else {
+        console.error('Invalid action', action);
+        this.energyComponent.useEnergy(100);
+      }
     }
   }
 }

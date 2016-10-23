@@ -37,7 +37,7 @@ export class FindTargetBehaviour extends Behaviours.Behaviour {
       return null;
     }
     return {
-      entity: target
+      target: target
     }
   }
 }

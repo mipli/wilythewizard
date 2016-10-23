@@ -8,7 +8,7 @@ export class Behaviour {
   protected nextAction: Behaviours.Action;
   constructor(protected entity: Entities.Entity) {
   }
-  invoke(): InvokedValue {
+  invoke(data: {} = {}): InvokedValue {
     throw new Exceptions.MissingImplementationError('Behaviour.invoke must be overwritten');
   }
 }
