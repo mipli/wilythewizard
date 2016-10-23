@@ -5,7 +5,7 @@ import * as Components from './index';
 
 import Engine = require('../Engine');
 
-export class RuneFreezeComponent extends Components.Component {
+export class RuneStunComponent extends Components.Component {
   private radius: number;
   private charges: number;
   private physicsComponent: Components.PhysicsComponent;
@@ -37,11 +37,11 @@ export class RuneFreezeComponent extends Components.Component {
     const eventPosition = event.data.physicsComponent.position; 
     if (eventPosition.x == this.physicsComponent.position.x && 
         eventPosition.y === this.physicsComponent.position.y) {
-      this.triggerFreeze(event.data.entity);
+      this.triggerStun(event.data.entity);
     }
   }
 
-  private triggerFreeze(entity: Entities.Entity) {
+  private triggerStun(entity: Entities.Entity) {
     if (this.factionComponent) {
       const eventFaction = <Components.FactionComponent>entity.getComponent(Components.FactionComponent);
       if (eventFaction) {
@@ -50,12 +50,7 @@ export class RuneFreezeComponent extends Components.Component {
         }
       }
     }
-    entity.addComponent(
-      new Components.SlowComponent(this.engine, {factor: 0.5}),
-      { 
-        duration: 10
-      }
-    ); 
+    entity.addComponent(new Components.StunComponent(this.engine), {duration: 5});
     this.charges--;
     if (this.charges <= 0) {
       this.engine.removeEntity(this.entity);

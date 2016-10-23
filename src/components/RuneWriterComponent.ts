@@ -40,7 +40,6 @@ export class RuneWriterComponent extends Components.Component {
       return null;
     }
   
-    return new Behaviours.WriteRuneAction(this.engine, this.entity);
-
+    return new Behaviours.WriteRuneAction(this.engine, this.entity, event.data.runeCreator);
   }
 }

@@ -2,6 +2,7 @@ import * as Core from '../core';
 import * as Events from '../events';
 import * as Components from './index';
 import * as Behaviours from '../behaviours';
+import * as Runes from '../runes';
 
 import InputHandler = require('../InputHandler');
 import Engine = require('../Engine');
@@ -63,6 +64,10 @@ export class InputComponent extends Components.Component {
       [InputHandler.KEY_0], 
       this.onTrapOne.bind(this)
     );
+    this.engine.inputHandler.listen(
+      [InputHandler.KEY_9], 
+      this.onTrapTwo.bind(this)
+    );
   }
 
   onTick(event: Events.Event) {
@@ -93,7 +98,21 @@ export class InputComponent extends Components.Component {
     if (!this.hasFocus) {
       return;
     }
-    const action = this.entity.fire(new Events.Event('writeRune', {}));
+    const action = this.entity.fire(new Events.Event('writeRune', {
+      runeCreator: Runes.createFreezeRune
+    }));
+    if (action) {
+      this.performAction(action);
+    }
+  }
+
+  private onTrapTwo() {
+    if (!this.hasFocus) {
+      return;
+    }
+    const action = this.entity.fire(new Events.Event('writeRune', {
+      runeCreator: Runes.createStunRune
+    }));
     if (action) {
       this.performAction(action);
     }

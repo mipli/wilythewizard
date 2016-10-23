@@ -1,8 +1,11 @@
+import * as Core from '../core';
 import * as Behaviours from './index';
 import * as Entities from '../entities';
 import * as Events from '../events';
 import * as Components from '../components';
 import * as Map from '../map';
+
+import * as Runes from '../runes';
 
 import Engine = require('../Engine');
 
@@ -10,32 +13,18 @@ export class WriteRuneAction extends Behaviours.Action {
   private engine: Engine;
   private physics: Components.PhysicsComponent;
   private factionComponent: Components.FactionComponent;
+  private runeCreator: (engine: Engine, position: Core.Position, Faction: Components.FactionComponent) => void;
 
-  constructor(engine: Engine, entity: Entities.Entity) {
+  constructor(engine: Engine, entity: Entities.Entity, runeCreator: (engine: Engine, position: Core.Position, Faction: Components.FactionComponent) => void) {
     super();
     this.engine = engine;
     this.physics = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
     this.factionComponent = <Components.FactionComponent>entity.getComponent(Components.FactionComponent);
+    this.runeCreator = runeCreator;
   }
 
   act(): number {
-    const rune = new Entities.Entity(this.engine, 'Rune', Entities.Type.Rune);
-    if (this.factionComponent) {
-      rune.addComponent(new Components.FactionComponent(this.engine, {
-        faction: this.factionComponent.faction
-      }));
-    }
-    rune.addComponent(new Components.PhysicsComponent(this.engine, {
-      position: this.physics.position,
-      blocking: false
-    }));
-    rune.addComponent(new Components.RenderableComponent(this.engine, {
-      glyph: new Map.Glyph('#', 0x44ff88, 0x000000)
-    }));
-    rune.addComponent(new Components.SelfDestructComponent(this.engine, {
-      turns: 10
-    }));
-    rune.addComponent(new Components.RuneFreezeComponent(this.engine));
+    this.runeCreator(this.engine, this.physics.position, this.factionComponent);
     return this.cost;
   }
 }

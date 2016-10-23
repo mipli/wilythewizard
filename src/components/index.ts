@@ -12,5 +12,7 @@ export * from './HealthComponent';
 export * from './RuneWriterComponent';
 export * from './RuneDamageComponent';
 export * from './RuneFreezeComponent';
+export * from './RuneStunComponent';
 export * from './SlowComponent';
+export * from './StunComponent';
 export * from './SightComponent';
