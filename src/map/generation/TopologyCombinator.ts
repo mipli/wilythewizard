@@ -66,7 +66,7 @@ export class TopologyCombinator {
     let combined = false;
 
     while (!combined && edges.length > 0) {
-      let idx = Core.Utils.getRandom(0, edges.length - 1); 
+      let idx = Core.Random.get(0, edges.length); 
       let edge = edges[idx];
       edges.splice(idx, 1);
       let surroundingTiles = Map.Utils.countSurroundingTiles(this.cells, edge);
@@ -74,7 +74,7 @@ export class TopologyCombinator {
         this.cells[edge.x][edge.y] = 0;
         this.topologies[edge.x][edge.y] = a;
         if (edges.length >= 4) {
-          if (Math.random() > 0.2) {
+          if (Core.Random.getFloat() > 0.2) {
             combined = true;
           }
         } else {

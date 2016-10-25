@@ -45,11 +45,11 @@ export class RoomGenerator {
   }
 
   private generateRoom() {
-    const size = Core.Utils.getRandom(4, 7);
-    const rectangularity = Core.Utils.getRandom(1, 3);
+    const size = Core.Random.get(4, 8);
+    const rectangularity = Core.Random.get(1, 4);
     let width: number;
     let height: number;
-    if (Math.random() > 0.5) {
+    if (Core.Random.getFloat() > 0.5) {
       height = size;
       width = size + rectangularity;
     } else {
@@ -57,10 +57,8 @@ export class RoomGenerator {
       height = size + rectangularity;
     }
 
-    let x = Core.Utils.getRandom(0, (this.width - width - 2));
-    x = Math.floor(x/2) * 2 + 1;
-    let y = Core.Utils.getRandom(0, (this.height - height - 2));
-    y = Math.floor(y/2) * 2 + 1;
+    let x = Core.Random.get(1, (this.width - width - 1));
+    let y = Core.Random.get(1, (this.height - height - 1));
 
     if (this.isSpaceAvailable(x, y, width, height)) {
         for (var i = x; i < x + width; i++) {

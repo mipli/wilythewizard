@@ -51,7 +51,7 @@ export class Tile {
   public static createTile(desc: TileDescription) {
     var g: Map.Glyph = null;
     if ((<Array<Map.Glyph>>desc.glyph).length && (<Array<Map.Glyph>>desc.glyph).length > 0) {
-      g = <Map.Glyph>Core.Utils.getRandomIndex(<Array<Map.Glyph>>desc.glyph);
+      g = <Map.Glyph>Core.Random.getRandomIndex(<Array<Map.Glyph>>desc.glyph);
     } else {
       g = <Map.Glyph>desc.glyph;
     }

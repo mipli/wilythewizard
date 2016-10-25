@@ -29,7 +29,7 @@ export namespace Utils {
 
     for (var x = 0; x < width; x++) {
       for (var y = 0; y < height; y++) {
-        let position = new Core.Position(Core.Utils.getRandom(0, width), Core.Utils.getRandom(0, height));
+        let position = new Core.Position(Core.Random.get(0, width), Core.Random.get(0, height));
         if (Utils.canCarve(map, position, 0, true)) {
           carvablesPositions.push(position);
         }
@@ -37,7 +37,7 @@ export namespace Utils {
     }
 
     if (carvablesPositions.length > 0) {
-      return Core.Utils.getRandomIndex(carvablesPositions);
+      return Core.Random.getRandomIndex(carvablesPositions);
     }
     return null;
   }

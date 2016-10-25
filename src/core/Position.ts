@@ -1,3 +1,5 @@
+import * as Core from './index';
+
 export class Position {
   private _x: number;
   private _y: number;
@@ -46,8 +48,8 @@ export class Position {
     if (height === -1) {
       height = Position.maxHeight;
     }
-    var x = Math.floor(Math.random() * width);
-    var y = Math.floor(Math.random() * height);
+    var x = Core.Random.get(0, width);
+    var y = Core.Random.get(0, height);
     return new Position(x, y);
   }
 

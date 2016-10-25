@@ -1,3 +1,8 @@
+let hash = window.location.hash;
+if (hash) {
+  (<any>window).SEED = hash.substring(1);
+}
+
 import Engine = require('./Engine');
 import Scene = require('./Scene');
 

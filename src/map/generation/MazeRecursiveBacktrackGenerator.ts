@@ -27,7 +27,7 @@ export class MazeRecursiveBacktrackGenerator {
       }
     }
     if (newCells.length > 0) {
-      this.stack = this.stack.concat(Core.Utils.randomizeArray(newCells));
+      this.stack = this.stack.concat(Core.Random.randomizeArray(newCells));
     }
   }
 

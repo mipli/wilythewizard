@@ -17,7 +17,7 @@ export function createFreezeRune(engine: Engine, position: Core.Position, factio
       blocking: false
     }));
     rune.addComponent(new Components.RenderableComponent(engine, {
-      glyph: new Map.Glyph('#', 0x44ff88, 0x000000)
+      glyph: new Map.Glyph('#', 0x47b9d8, 0x000000)
     }));
     rune.addComponent(new Components.SelfDestructComponent(engine, {
       turns: 10
@@ -38,7 +38,7 @@ export function createStunRune(engine: Engine, position: Core.Position, factionC
       blocking: false
     }));
     rune.addComponent(new Components.RenderableComponent(engine, {
-      glyph: new Map.Glyph('#', 0x888833, 0x000000)
+      glyph: new Map.Glyph('#', 0xe57812, 0x000000)
     }));
     rune.addComponent(new Components.SelfDestructComponent(engine, {
       turns: 10
