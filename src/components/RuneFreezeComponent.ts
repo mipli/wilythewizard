@@ -11,7 +11,7 @@ export class RuneFreezeComponent extends Components.Component {
   private physicsComponent: Components.PhysicsComponent;
   private factionComponent: Components.FactionComponent;
 
-  constructor(engine: Engine, data: {radius: number, charges: number} = {radius: 1, charges: 1}) {
+  constructor(engine: Engine, data: {radius: number, charges: number} = {radius: 3, charges: 1}) {
     super(engine);
     this.radius = data.radius;
     this.charges = data.charges;
@@ -50,15 +50,30 @@ export class RuneFreezeComponent extends Components.Component {
         }
       }
     }
-    entity.addComponent(
-      new Components.SlowComponent(this.engine, {factor: 0.5}),
-      { 
-        duration: 10
+    this.addSlowComponent(entity, 10);
+
+    this.engine.getEntities((entity) => {
+      const entityComponent = (<Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent));
+      if (!entityComponent) {
+        return false;
       }
-    ); 
+      const distance = Core.Position.distance(entityComponent.position, this.physicsComponent.position);
+      return distance <= this.radius;
+    }).map((entity) => this.addSlowComponent(entity, 5));
+
+
     this.charges--;
     if (this.charges <= 0) {
       this.engine.removeEntity(this.entity);
     }
+  }
+
+  private addSlowComponent(entity: Entities.Entity, duration: number) {
+      entity.addComponent(
+        new Components.SlowComponent(this.engine, {factor: 0.5}),
+        { 
+          duration: 5
+        }
+      ); 
   }
 }

@@ -40,9 +40,6 @@ class LogView {
 
   private onTurn(event: Events.Event) {
     this.currentTurn = event.data.currentTurn;
-    if (this.player) {
-      this.effects = this.player.gather(new Events.Event('getStatusEffect'));
-    }
   }
 
   private onMessage(event: Events.Event) {
@@ -61,6 +58,8 @@ class LogView {
   }
 
   render(blitFunction: any) {
+    this.effects = this.player.gather(new Events.Event('getStatusEffect'));
+
     this.console.setText(' ', 0, 0, this.console.width, this.console.height);
 
     for (let i = 0; i < this.width; i++) {
