@@ -8,6 +8,7 @@ import Engine = require('../Engine');
 
 export class MeleeAttackBehaviour extends Behaviours.Behaviour {
   private physicsComponent: Components.PhysicsComponent;
+  private target: Entities.Entity;
 
   constructor(protected engine: Engine, protected entity: Entities.Entity) {
     super(entity);
@@ -15,12 +16,15 @@ export class MeleeAttackBehaviour extends Behaviours.Behaviour {
   }
 
 
-  invoke(data: {target: Entities.Entity}) {
-    const position = (<Components.PhysicsComponent>data.target.getComponent(Components.PhysicsComponent)).position;
+  invoke(data: {target: Entities.Entity} = {target: null}) {
+    if (data && data.target) {
+      this.target = data.target;
+    }
+    const position = (<Components.PhysicsComponent>this.target.getComponent(Components.PhysicsComponent)).position;
     const distance = Core.Position.distance(this.physicsComponent.position, position);
 
     if (distance === 1) {
-      return new Behaviours.MeleeAttackAction(this.entity, data.target);
+      return new Behaviours.MeleeAttackAction(this.entity, this.target);
     }
     return null;
   }

@@ -9,7 +9,7 @@ import Engine = require('../Engine');
 export class FindTargetBehaviour extends Behaviours.Behaviour {
   private physicsComponent: Components.PhysicsComponent;
 
-  constructor(protected engine: Engine, protected entity: Entities.Entity, private isTarget: (entity: Entities.Entity) => boolean, private sightLength: number = 5) {
+  constructor(protected engine: Engine, protected entity: Entities.Entity, private isTarget: (entity: Entities.Entity) => boolean) {
     super(entity);
     this.physicsComponent = <Components.PhysicsComponent>entity.getComponent(Components.PhysicsComponent);
   }

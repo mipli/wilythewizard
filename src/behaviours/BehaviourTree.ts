@@ -3,13 +3,25 @@ import * as Behaviours from '../behaviours';
 
 export class BehaviourTree {
   private _root: BehaviourNode;
-  private _currentNodeIndex: BehaviourNode;
+  private currentNode: BehaviourNode;
+
+  constructor() {
+    this.currentNode = null;
+  }
+
   invoke(data: {} = {}): Behaviours.InvokedValue {
+    if (this.currentNode) {
+      return this.currentNode.invoke(null);
+    }
     return this._root.invoke(data);
   }
 
   addRoot(root: BehaviourNode) {
     this._root = root;
+  }
+
+  setCurrentNode(node: BehaviourNode) {
+    this.currentNode = node;
   }
 }
 
@@ -18,6 +30,7 @@ export type BehaviourNode = ControlFlowNode | Behaviours.Behaviour;
 export interface ControlFlowNode {
   parent: BehaviourNode;
   children: BehaviourNode[];
+  currentNode: BehaviourNode;
 
   addChild(BehaviourNode): void;
   invoke({}): Behaviours.InvokedValue;
@@ -32,6 +45,12 @@ export class SequenceNode implements ControlFlowNode {
     this._parent = value;
 
   }
+
+  private _currentNode: BehaviourNode;
+  get currentNode() {
+    return this._currentNode;
+  }
+
   private _children: BehaviourNode[];
   get children() {
     return this._children;
@@ -46,6 +65,9 @@ export class SequenceNode implements ControlFlowNode {
   }
 
   invoke(data: {} = {}): Behaviours.InvokedValue {
+    if (this.currentNode) {
+      return this.step();
+    }
     this.currentNodeIndex = 0;
     return this.step(data);
   }
@@ -65,15 +87,17 @@ export class SequenceNode implements ControlFlowNode {
     let node = this._children[this.currentNodeIndex];
     let nodeValue = node.invoke(data);
 
-    this.currentNodeIndex++;
-
     if (nodeValue) {
       if (typeof (<Behaviours.Action>nodeValue).act === 'function') {
+        this._currentNode = node;
         return nodeValue;
       } else {
+        this._currentNode = null;
+        this.currentNodeIndex++;
         return this.step(nodeValue);
       }
     }
+    this._currentNode = null;
     return false;
   }
 }
@@ -83,6 +107,12 @@ export class SelectorNode implements ControlFlowNode {
   get parent() {
     return this._parent;
   }
+
+  private _currentNode: BehaviourNode;
+  get currentNode() {
+    return this._currentNode;
+  }
+
   private _children: BehaviourNode[];
   get children() {
     return this._children;
@@ -95,9 +125,10 @@ export class SelectorNode implements ControlFlowNode {
 
   invoke(data: {} = {}): Behaviours.InvokedValue {
     let ret = null;
-    this._children.some(function(node: BehaviourNode) {
+    this._children.some((node: BehaviourNode) => {
       ret = node.invoke(data);
       if (ret) {
+        this._currentNode = node;
         return true;
       }
       return false;

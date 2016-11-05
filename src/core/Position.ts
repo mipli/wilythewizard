@@ -25,6 +25,9 @@ export class Position {
   }
 
   public static equals(a: Position, b: Position) {
+    if (!a || !b) {
+      return false;
+    }
     return a.x === b.x && a.y === b.y;
   }
 

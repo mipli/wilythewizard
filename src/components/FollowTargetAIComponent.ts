@@ -29,7 +29,7 @@ export class FollowTargetAIComponent extends Components.Component {
   private initializeBehaviourTree() {
     let findTargetBehaviour = new Behaviours.FindTargetBehaviour(this.engine, this.entity, (entity: Entities.Entity) => {
       return entity.type === this.targetType
-    }, 5);
+    });
     let followTargetBehaviour = new Behaviours.FollowTargetBehaviour(this.engine, this.entity);
     let randomWalkBehaviour = new Behaviours.RandomWalkBehaviour(this.engine, this.entity);
     let meleeAttackBehaviour = new Behaviours.MeleeAttackBehaviour(this.engine, this.entity);
