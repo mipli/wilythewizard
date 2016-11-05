@@ -15,6 +15,7 @@ class MapView {
   private viewEntity: Entities.Entity;
 
   private fogOfWarColor: Core.Color;
+  private enableFogOfWar: boolean;
 
   constructor(private engine: Engine, private map: Map.Map, private width: number, private height: number) {
     this.fogOfWarColor = 0x9999aa;
@@ -23,6 +24,7 @@ class MapView {
     this.renderableEntities = [];
     this.renderableItems = [];
     this.viewEntity = null;
+    this.enableFogOfWar = true;
   }
 
   setViewEntity(entity: Entities.Entity) {
@@ -38,6 +40,14 @@ class MapView {
       'renderableComponentDestroyed',
       this.onRenderableComponentDestroyed.bind(this)
     ));
+    this.engine.listen(new Events.Listener(
+      'toggleFogOfWar',
+      this.onToggleFogOfWar.bind(this)
+    ));
+  }
+
+  private onToggleFogOfWar(event: Events.Event) {
+    this.enableFogOfWar = !this.enableFogOfWar;
   }
 
   private onRenderableComponentDestroyed(event: Events.Event) {
@@ -145,6 +155,9 @@ class MapView {
   }
 
   private isVisible(position: Core.Position) {
+    if (!this.enableFogOfWar) {
+      return true;
+    }
     return this.viewEntity.fire(new Events.Event('canSee', {
       position: position
     }));
